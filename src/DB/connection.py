@@ -3,7 +3,7 @@ from dotenv import dotenv_values
 from psycopg.rows import dict_row
 
 # ----------------------------------------------------------------
-config = dotenv_values("../../../.env")
+config = dotenv_values("../../.env")
 
 
 my_user = config["USER_NAME"] if not None else "postgres"
