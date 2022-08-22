@@ -3,7 +3,7 @@ from dotenv import dotenv_values
 from psycopg.rows import dict_row
 
 # ----------------------------------------------------------------
-config = dotenv_values("../.env")
+config = dotenv_values("../.env") if not None else dotenv_values("/app/.heroku/python/bin:/usr/local/bin:/usr/bin:/bin")
 
 my_user = config["USER_NAME"] if not None else "postgres"
 my_pass = config["PASS_WORD"] if not None else None
