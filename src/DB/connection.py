@@ -7,13 +7,6 @@ from psycopg.rows import dict_row
 # ----------------------------------------------------------------
 config = dotenv_values("./.env")
 
-# my_user = config["USER_NAME"] if  len(config) != 0 else os.environ.get("USER_NAME")
-# my_pass = config["PASS_WORD"] if len(config) != 0 else None
-# lab_db = config["LAB_DB"] if len(config) != 0 else None
-# lab_db_port = config["LAB_DB_PORT"] if len(config) != 0 else None
-# lab_db_server = config["LAB_DB_SERVER"] if len(config) != 0 else os.environ.get("DATABASE_URL")
-
-
 # ----------------------------------------------------------------
 conn = (
     psycopg.connect(
