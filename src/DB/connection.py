@@ -1,15 +1,18 @@
 import psycopg
+import os
 from dotenv import dotenv_values
 from psycopg.rows import dict_row
 
+
 # ----------------------------------------------------------------
-config = dotenv_values("../.env") if not None else dotenv_values("/app/.heroku/python/bin:/usr/local/bin:/usr/bin:/bin")
+config = dotenv_values("./.env") if not None else dotenv_values("/usr/bin/env")
+print(os.environ["USER_NAME"])
 
 my_user = config["USER_NAME"] if not None else "postgres"
 my_pass = config["PASS_WORD"] if not None else None
 lab_db = config["LAB_DB"] if not None else "ynix-app"
 lab_db_server = config["LAB_DB_SERVER"] if not None else config["DATABASE_URL"]
-lab_db_port = config["LAB_DB_PORT"] if not None else '5432'
+lab_db_port = config["LAB_DB_PORT"] if not None else "5432"
 
 # ----------------------------------------------------------------
 conn = psycopg.connect(
