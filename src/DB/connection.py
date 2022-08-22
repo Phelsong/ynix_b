@@ -14,15 +14,18 @@ config = dotenv_values("./.env")
 # lab_db_server = config["LAB_DB_SERVER"] if len(config) != 0 else os.environ.get("DATABASE_URL")
 
 
-
 # ----------------------------------------------------------------
-conn = psycopg.connect(
-    hostaddr= config["LAB_DB_SERVER"] if len(config) != 0 else os.environ.get("DATABASE_URL"),
-    port=config["LAB_DB_PORT"] if len(config) != 0 else None,
-    dbname=config["LAB_DB"] if len(config) != 0 else None,
-    user=config["USER_NAME"] if  len(config) != 0 else os.environ.get("USER_NAME"),
-    password=config["PASS_WORD"] if len(config) != 0 else None,
-    row_factory=dict_row,
+conn = (
+    psycopg.connect(
+        hostaddr=config["LAB_DB_SERVER"],
+        port=config["LAB_DB_PORT"],
+        dbname=config["LAB_DB"],
+        user=config["USER_NAME"],
+        password=config["PASS_WORD"],
+        row_factory=dict_row,
+    )
+    if len(config) != 0
+    else psycopg.connect(conninfo=os.environ.get("DATABASE_URL"), row_factory=dict_row)
 )
 # alt_conn = psycopg.connect(
 #     hostaddr=lab_db_server,
