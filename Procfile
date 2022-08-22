@@ -1,1 +1,1 @@
-web: yarn serve -s build
+web: python main.py
