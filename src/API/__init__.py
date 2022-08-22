@@ -3,7 +3,7 @@ import os
 import importlib.util
 import sys
  
-db_path = os.path.abspath("../DB/__init__.py")
+db_path = os.path.abspath("./src/DB/__init__.py")
 name = "DB"
 
 spec = importlib.util.spec_from_file_location(name, db_path)
