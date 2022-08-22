@@ -16,7 +16,7 @@ origins = [
     "https://localhost:3000",
     "http://127.0.0.1",
     "http://ynix-b.herokuapp.com", 
-    "https://ynix-b.herokuapp.com"
+    "https://ynix-b.herokuapp.com",
 ]   
 app.add_middleware(
     CORSMiddleware,
@@ -113,7 +113,7 @@ async def get_zone_info(zone_id):
 # ------------------------------------------------------------------------------
 
 if __name__ == "__main__":
-    config = uvicorn.Config("main:app", port=8000, log_level="info")
+    config = uvicorn.Config("main:app", host="0.0.0.0", port=8000, log_level="info")
     server = uvicorn.Server(config)
     server.run()
 
