@@ -14,7 +14,9 @@ origins = [
     "http://localhost",
     "http://localhost:3000",
     "https://localhost:3000",
-    "http://127.0.0.1"
+    "http://127.0.0.1",
+    "http://ynix-b.herokuapp.com", 
+    "https://ynix-b.herokuapp.com"
 ]   
 app.add_middleware(
     CORSMiddleware,
