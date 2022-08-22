@@ -7,12 +7,11 @@ from psycopg.rows import dict_row
 # ----------------------------------------------------------------
 config = dotenv_values("./.env")
 
-
-my_user = os.environ.get("USER_NAME") if os.environ.get("USER_NAME") != None else config["USER_NAME"]
-my_pass = config["PASS_WORD"] if config["PASS_WORD"] != None else None
-lab_db = config["LAB_DB"] if config["LAB_DB"] != None else None
-lab_db_port = config["LAB_DB_PORT"] if config["LAB_DB_PORT"] != None else "5432"
-lab_db_server = os.environ.get("DATABASE_URL") if os.environ.get("DATABASE_URL") != None else config["LAB_DB_SERVER"]
+my_user = config["USER_NAME"] if  len(config) != 0 else  os.environ.get("USER_NAME")
+my_pass = config["PASS_WORD"] if len(config) != 0 else None
+lab_db = config["LAB_DB"] if len(config) != 0 else None
+lab_db_port = config["LAB_DB_PORT"] if len(config) != 0 else "5432"
+lab_db_server = config["LAB_DB_SERVER"] if len(config) != 0 else os.environ.get("DATABASE_URL")
 
 
 
