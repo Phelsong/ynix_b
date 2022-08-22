@@ -1,2 +1,1 @@
-web: python src/api/main.py
-start:
+web: python src/API/main.py
