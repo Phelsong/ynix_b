@@ -103,7 +103,7 @@ class Calc:
         # -----------------------------
         # totals
         self.t_ap = (
-            attacker.ap + attacker.ap_combat_buffs - attacker.ap_debuffs
+            attacker.ap + attacker.ap_combat_buffs - attacker.ap_debuffs + 7 # 7 is knowledge AP
             if defender.class_id != 100
             else attacker.ap
             + attacker.monster_ap
