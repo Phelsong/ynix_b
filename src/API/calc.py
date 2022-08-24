@@ -7,6 +7,9 @@ from __init__ import get_class_basic_skills_query
 # Find/Jump to : Attacker, Defender, Calc, calc_mean, calc_range, calc_if_crit, calc_hits, run_calc
 
 
+
+##### !!! Rewrite Calc with new logic from 8.24 testing. 
+
 class Attacker(object):
     def __init__(
         self,
@@ -167,8 +170,8 @@ class Calc:
     # ------------------------------------------------------------------------------------------------
     def calc_range(self):
         hit_value = self.skill["hit1"]["damage"]
-        damage_low = (self.t_ap - 9) - self.t_dr
-        damage_high = (self.t_ap + 9) - self.t_dr
+        damage_low = (self.t_ap - 10) - self.t_dr
+        damage_high = (self.t_ap + 10) - self.t_dr
         species_ap_low = 0
         species_ap_high = 0
 
@@ -257,7 +260,7 @@ class Calc:
         hits = []
         # ----------------------------------------
         while hit_counter <= hit_count:
-            e_ap = (self.t_ap - 9 + random.randrange(0, 18)) - self.t_dr
+            e_ap = (self.t_ap - 10 + random.randrange(0, 20)) - self.t_dr
             species_ap = 0
             if e_ap > 0:
                 e_ap += self.species_damage * 2

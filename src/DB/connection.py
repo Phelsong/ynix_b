@@ -1,11 +1,12 @@
-import psycopg
 import os
+
+import psycopg
 from dotenv import dotenv_values
 from psycopg.rows import dict_row
 
-
 # ----------------------------------------------------------------
-config = dotenv_values("./.env")
+config = dotenv_values(".env")
+
 
 # ----------------------------------------------------------------
 conn = (

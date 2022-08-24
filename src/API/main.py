@@ -113,7 +113,7 @@ async def get_zone_info(zone_id):
 # ------------------------------------------------------------------------------
 
 if __name__ == "__main__":
-    config = uvicorn.Config("main:app", host="0.0.0.0", port=(os.environ.get("PORT") or "8000"), log_level="info")
+    config = uvicorn.Config("main:app", host="0.0.0.0", port=(os.environ.get("PORT") or "8000"), log_level="info",)
     server = uvicorn.Server(config)
     server.run()
 

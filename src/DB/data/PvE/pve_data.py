@@ -12,7 +12,7 @@ class Zone:
 
 #--------------------------------------------------------------------------
 centaurus_herd = Zone(15, "Centaurus Herd", "Valencia", 340, 0, "demihuman")
-manshaum_forest = Zone(33, "Manshaum Forest", "Kamasylvia", 435, 0, "kamasylvian") # soft_ap cap at: 300? - damage
+manshaum_forest = Zone(33, "Manshaum Forest", "Kamasylvia", 420, 0, "kamasylvian") # 420-430? soft_ap cap at: 300? - damage
 # castle_ruins_elvia = Zone(34, "Elvia - Castle Ruins", "Serendia", 0, 0, "human")
 thornwood_forest = Zone(35, "Thornwood Forest", "O'dyllita", 450, 0, "kamasylvian") # soft_ap cap at: 300? - damage
 
