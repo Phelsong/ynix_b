@@ -5,8 +5,8 @@ import uvicorn
 
 
 from __init__ import * 
-# from calc import *
-from alt_calc import *
+from calc import *
+
 
 # -----------------------------------------------------------------------------
 app = FastAPI()

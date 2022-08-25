@@ -103,14 +103,14 @@ class Calc:
         # -----------------------------
         # totals
         self.t_ap = (
-            attacker.ap + attacker.ap_combat_buffs - attacker.ap_debuffs 
+            attacker.ap + attacker.ap_combat_buffs - attacker.ap_debuffs
             if defender.class_id != 100
             else attacker.ap
             + attacker.monster_ap
             + attacker.ap_combat_buffs
             - attacker.ap_debuffs
-            + 12 # 12 knowledge AP
-        )
+            + 7 #7 is knowledge AP
+        ) 
 
         self.t_acc_rate = (
             attacker.acc_rate
@@ -147,14 +147,14 @@ class Calc:
         species_ap_mean = 0
         # -------------------------------------
         if damage_mean > 0:
-            damage_mean += self.species_damage
-        # elif damage_mean < 0:
-        #     d_temp = self.species_damage - abs(damage_mean) / 2
-        #     species_ap_mean = (
-        #         d_temp * 2 + abs(damage_mean) / 2
-        #         if d_temp > 0
-        #         else self.species_damage / 2
-        #     )
+            damage_mean += self.species_damage * 2
+        elif damage_mean < 0:
+            d_temp = self.species_damage - abs(damage_mean) / 2
+            species_ap_mean = (
+                d_temp * 2 + abs(damage_mean) / 2
+                if d_temp > 0
+                else self.species_damage / 2
+            )
         # --------------------------------------
         e_ap_mean = damage_mean + species_ap_mean
         base_damage_mean = (self.t_ap + species_ap_mean) * (
@@ -178,41 +178,41 @@ class Calc:
 
         # ------------------------------
         if damage_low > 0:
-            damage_low += self.species_damage
-        # elif damage_low < 0:
-        #     hd_temp = self.species_damage - abs(damage_low) / 2
-        #     species_ap_low = (
-        #         hd_temp * 2 + abs(damage_low) / 2
-        #         if hd_temp > 0
-        #         else self.species_damage / 2
-        #     )
+            damage_low += self.species_damage *2
+        elif damage_low < 0:
+            hd_temp = self.species_damage - abs(damage_low) / 2
+            species_ap_low = (
+                hd_temp * 2 + abs(damage_low) / 2
+                if hd_temp > 0
+                else self.species_damage / 2
+            )
         # --------
         if damage_high > 0:
-            damage_high += self.species_damage
-        # elif damage_high < 0:
-        #     hd_temp = self.species_damage - abs(damage_high) / 2
-        #     species_ap_high = (
-        #         hd_temp * 2 + abs(damage_high) / 2
-        #         if hd_temp > 0
-        #         else self.species_damage / 2
-        #     )
+            damage_high += self.species_damage *2
+        elif damage_high < 0:
+            hd_temp = self.species_damage - abs(damage_high) / 2
+            species_ap_high = (
+                hd_temp * 2 + abs(damage_high) / 2
+                if hd_temp > 0
+                else self.species_damage / 2
+            )
         # ------------------------------
         e_ap_low = damage_low + species_ap_low
-        base_damage_low = (self.t_ap -9) * (
+        base_damage_low = ((self.t_ap- 9 + random.randrange(0, 18) ) + species_ap_low) * (
             hit_value / self.attacker.basic
         )
         # ---------
         e_ap_high = damage_high + species_ap_high
-        base_damage_high = (self.t_ap + 9) * (
+        base_damage_high = ((self.t_ap - 9 + random.randrange(0, 18))  + species_ap_high) * (
             hit_value / self.attacker.basic
         )
         # ------------------------------
         hit_damage_low = (
-            e_ap_low * hit_value if e_ap_low > 0 else base_damage_low
+            e_ap_low * hit_value + base_damage_low if e_ap_low > 0 else base_damage_low
         ) * 0.8
 
         hit_damage_high = (
-            e_ap_high * hit_value
+            e_ap_high * hit_value + base_damage_high
             if e_ap_high > 0
             else base_damage_high
         ) * 0.8
@@ -264,14 +264,14 @@ class Calc:
             e_ap = (self.t_ap - 9 + random.randrange(0, 18)) - self.t_dr
             species_ap = 0
             if e_ap > 0:
-                e_ap += self.species_damage
-            # elif e_ap < 0:
-            #     hd_temp = self.species_damage - abs(e_ap) / 2
-            #     species_ap = (
-            #         hd_temp * 2 + abs(e_ap) / 2
-            #         if hd_temp > 0
-            #         else self.species_damage / 2
-            #     )
+                e_ap += self.species_damage *2
+            elif e_ap < 0:
+                hd_temp = self.species_damage - abs(e_ap) / 2
+                species_ap = (
+                    hd_temp * 2 + abs(e_ap) / 2
+                    if hd_temp > 0
+                    else self.species_damage / 2
+                )
             # -------------------------------------
             # Core output calc !!!!!!!!!!!!!!!!!!!
             e_ap += species_ap
