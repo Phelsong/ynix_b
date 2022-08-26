@@ -8,7 +8,7 @@ from __init__ import get_class_basic_skills_query
 
 
 
-##### !!! Rewrite Calc with new logic from 8.24 testing. 
+##### !!!!!!!!!!!!!!!! LEFT FOR MATH REFERENCE >>> DO NOT USE !!!!!!!!!!!!!!!!! #####
 
 class Attacker(object):
     def __init__(

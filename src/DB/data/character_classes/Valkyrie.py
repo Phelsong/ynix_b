@@ -30,7 +30,7 @@ Sharp_Light = Skill(
     name="Sharp_Light",
     acc_rate=0.1,
     hit1=Hit(
-        damage=7.59, hit_count=3, pvp_mod=0.37, reduced_on_cd_amoun=0.2, air_attack=True
+        damage=7.59, hit_count=3, pvp_mod=0.37, reduced_on_cd_amount=0.2, air_attack=True
     ),
     reduced_on_cd=True
 )
