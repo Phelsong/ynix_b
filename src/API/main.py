@@ -1,12 +1,11 @@
 import os
+
+import uvicorn
+from calc import *
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-import uvicorn
 
-
-from __init__ import * 
-from calc import *
-
+from __init__ import *
 
 # -----------------------------------------------------------------------------
 app = FastAPI()

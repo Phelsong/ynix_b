@@ -42,12 +42,27 @@ class Skill:
 
 
 class Hit:
-    def __init__(self, damage, hit_count, pvp_mod, pve_crit_rate=0, pvp_crit_rate=0):
+    def __init__(
+        self,
+        damage,
+        hit_count,
+        pvp_mod,
+        pve_crit_rate=0,
+        pvp_crit_rate=0,
+        reduced_on_cd_amount=None,
+        reduced_pvp_hits=None,
+        down_attack=True,
+        air_attack=False,
+    ):
         self.damage = damage
         self.hit_count = hit_count
         self.pvp_mod = pvp_mod
         self.pve_crit_rate = pve_crit_rate
         self.pvp_crit_rate = pvp_crit_rate
+        self.reduced_on_cd_amount = reduced_on_cd_amount
+        self.reduced_pvp_hits = reduced_pvp_hits
+        self.down_attack = down_attack
+        self.air_attack = air_attack
 
 
 # ------------------------------------------------------------------------------
