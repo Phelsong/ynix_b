@@ -7,8 +7,8 @@ from __init__ import get_class_basic_skills_query
 # Find/Jump to : Attacker, Defender, Calc, calc_mean, calc_range, calc_if_crit, calc_hits, run_calc
 
 
-##### !!!!!!!!!!!!!!!! LEFT FOR MATH REFERENCE >>> DO NOT USE !!!!!!!!!!!!!!!!! #####
 
+##### !!!!!!!!!!!!!!!! LEFT FOR MATH REFERENCE >>> DO NOT USE !!!!!!!!!!!!!!!!! #####
 
 class Attacker(object):
     def __init__(
@@ -109,8 +109,8 @@ class Calc:
             + attacker.monster_ap
             + attacker.ap_combat_buffs
             - attacker.ap_debuffs
-            # 7-12 is knowledge AP?
-        )
+            + 7 #7 is knowledge AP
+        ) 
 
         self.t_acc_rate = (
             attacker.acc_rate
@@ -143,79 +143,76 @@ class Calc:
     # --------------------------------------------------------------------------
     def calc_mean(self):
         hit_value = self.skill["hit1"]["damage"]
-        e_ap_mean = self.t_ap - self.t_dr + (self.species_damage * 1.8)
+        damage_mean = self.t_ap - self.t_dr
         species_ap_mean = 0
         # -------------------------------------
-        # if e_ap_mean > 0:
-        #     e_ap_mean += self.species_damage * 1.8
-        # elif e_ap_mean < 0:
-        #     d_temp = self.species_damage - abs(e_ap_mean) / 2
-        #     species_ap_mean = (
-        #         d_temp * 2 + abs(e_ap_mean) / 2
-        #         if d_temp > 0
-        #         else self.species_damage / 2
-        #     )
-        #     e_ap_mean += species_ap_mean
+        if damage_mean > 0:
+            damage_mean += self.species_damage * 2
+        elif damage_mean < 0:
+            d_temp = self.species_damage - abs(damage_mean) / 2
+            species_ap_mean = (
+                d_temp * 2 + abs(damage_mean) / 2
+                if d_temp > 0
+                else self.species_damage / 2
+            )
         # --------------------------------------
-    
-        base_damage_mean = (self.t_ap + (self.species_damage * 1.8)) * (hit_value / self.attacker.basic)
+        e_ap_mean = damage_mean + species_ap_mean
+        base_damage_mean = (self.t_ap + species_ap_mean) * (
+            hit_value / self.attacker.basic
+        )
         hit_damage_mean = (
-            (e_ap_mean * hit_value) + base_damage_mean
+            e_ap_mean * hit_value + base_damage_mean
             if e_ap_mean > 0
             else base_damage_mean
         ) * 0.8
-        # -------------------------------------_
-        print("E_ap = ", e_ap_mean)
+        # -------------------------------------
         return round(hit_damage_mean)
 
     # ------------------------------------------------------------------------------------------------
-    # =================================================================================
-    # ===============   Calc Range   =================================
-    # =================================================================================
     def calc_range(self):
         hit_value = self.skill["hit1"]["damage"]
-        e_ap_low = (self.t_ap - 9) - self.t_dr
-        e_ap_high = (self.t_ap + 9) - self.t_dr
+        damage_low = (self.t_ap - 9) - self.t_dr
+        damage_high = (self.t_ap + 9) - self.t_dr
         species_ap_low = 0
         species_ap_high = 0
 
         # ------------------------------
-        # if e_ap_low > 0:
-        #     e_ap_low += self.species_damage * 2 
-        # elif e_ap_low < 0:
-        #     hd_temp = self.species_damage - abs(e_ap_low) *.5
-        #     species_ap_low = (
-        #         hd_temp * 2 + abs(e_ap_low) * .5
-        #         if hd_temp > 0
-        #         else self.species_damage * .5
-        #     )
-        #     e_ap_low += species_ap_low
-        # # --------
-        # if e_ap_high > 0:
-        #     e_ap_high += self.species_damage * 2
-        # elif e_ap_high < 0:
-        #     hd_temp = self.species_damage - abs(e_ap_high) * .5
-        #     species_ap_high = (
-        #         hd_temp * 2 + abs(e_ap_high) * .5
-        #         if hd_temp > 0
-        #         else self.species_damage * .5
-        #     )
-        #     e_ap_high += species_ap_high
+        if damage_low > 0:
+            damage_low += self.species_damage *2
+        elif damage_low < 0:
+            hd_temp = self.species_damage - abs(damage_low) / 2
+            species_ap_low = (
+                hd_temp * 2 + abs(damage_low) / 2
+                if hd_temp > 0
+                else self.species_damage / 2
+            )
+        # --------
+        if damage_high > 0:
+            damage_high += self.species_damage *2
+        elif damage_high < 0:
+            hd_temp = self.species_damage - abs(damage_high) / 2
+            species_ap_high = (
+                hd_temp * 2 + abs(damage_high) / 2
+                if hd_temp > 0
+                else self.species_damage / 2
+            )
         # ------------------------------
-        e_ap_low += (self.species_damage * 1.8)
-        e_ap_high += (self.species_damage * 1.8)
-        base_damage_low = (self.t_ap - 9 + (self.species_damage * 1.8)) * (hit_value / self.attacker.basic)
+        e_ap_low = damage_low + species_ap_low
+        base_damage_low = ((self.t_ap- 9 + random.randrange(0, 18) ) + species_ap_low) * (
+            hit_value / self.attacker.basic
+        )
         # ---------
-        base_damage_high = (self.t_ap + 9 + (self.species_damage * 1.8)) * (hit_value / self.attacker.basic)
+        e_ap_high = damage_high + species_ap_high
+        base_damage_high = ((self.t_ap - 9 + random.randrange(0, 18))  + species_ap_high) * (
+            hit_value / self.attacker.basic
+        )
         # ------------------------------
         hit_damage_low = (
-            (e_ap_low * hit_value) + base_damage_low
-            if e_ap_low > 0
-            else base_damage_low
+            e_ap_low * hit_value + base_damage_low if e_ap_low > 0 else base_damage_low
         ) * 0.8
 
         hit_damage_high = (
-            (e_ap_high * hit_value) + base_damage_high
+            e_ap_high * hit_value + base_damage_high
             if e_ap_high > 0
             else base_damage_high
         ) * 0.8
@@ -237,9 +234,6 @@ class Calc:
 
     # --------------------------------------------------------------------------------------------
 
-    # =================================================================================
-    # =============== Crits =================================
-    # =================================================================================
     def calc_if_crit(self, hit_in, this_hit):
         crit_chance = (
             self.attacker.crit_rate
@@ -260,9 +254,6 @@ class Calc:
 
     # ---------------------------------------------------------------------------------------------
 
-    # =================================================================================
-    # =============== Calc Random Hits =================================
-    # =================================================================================
     def calc_hits(self, hit_in):
         hit_value = hit_in["damage"]
         hit_count = hit_in["hit_count"]
@@ -270,25 +261,26 @@ class Calc:
         hits = []
         # ----------------------------------------
         while hit_counter <= hit_count:
-            e_ap = (self.t_ap - 10 + random.randrange(0, 20)) - self.t_dr + (self.species_damage * 1.8)
-            # species_ap = 0
-            # if e_ap > 0:
-            #     e_ap += self.species_damage * 2
-            # elif e_ap < 0:
-            #     hd_temp = self.species_damage - abs(e_ap) / 2
-            #     species_ap = (
-            #         hd_temp * 2 + abs(e_ap) / 2
-            #         if hd_temp > 0
-            #         else self.species_damage / 2
-            #     )
-            #     e_ap += species_ap
+            e_ap = (self.t_ap - 9 + random.randrange(0, 18)) - self.t_dr
+            species_ap = 0
+            if e_ap > 0:
+                e_ap += self.species_damage *2
+            elif e_ap < 0:
+                hd_temp = self.species_damage - abs(e_ap) / 2
+                species_ap = (
+                    hd_temp * 2 + abs(e_ap) / 2
+                    if hd_temp > 0
+                    else self.species_damage / 2
+                )
             # -------------------------------------
             # Core output calc !!!!!!!!!!!!!!!!!!!
-            base_damage = ((self.t_ap - 10 + random.randrange(0, 20)) + (self.species_damage * 1.8)) * (
-                hit_value / self.attacker.basic
-            )
+            e_ap += species_ap
+            base_damage = ((self.t_ap - 9 + random.randrange(0, 18))+ species_ap) * (hit_value / self.attacker.basic)
+            print(e_ap)
             hit_damage = (
-                (e_ap * hit_value) + base_damage if e_ap > 0 else base_damage
+                e_ap * hit_value
+                if e_ap > 0 
+                else base_damage
             ) * 0.8
             # !!!!!!!!!^^^^^^!!!!!!!!!!!!
             hits.append(round(self.calc_if_crit(hit_in, hit_damage)))
@@ -321,5 +313,4 @@ class Calc:
             if self.skill["hit6"] != None
             else None,
         }
-        print("range =", data["Hit 1 range"][0],"-", data["Hit 1 range"][1])
         return data
