@@ -292,6 +292,7 @@ class Calc:
     # ---------------------------------------------------------------------------------------------------------------------------
 
     def run_calc(self):
+        print("Running Calc V1")
         data = {
             "Hit 1 mean": self.calc_mean(),
             "Hit 1 range": self.calc_range(),
