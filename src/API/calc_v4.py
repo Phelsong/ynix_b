@@ -4,11 +4,7 @@ import random
 from __init__ import get_class_basic_skills_query
 
 # ----------------------------------------------------------------
-# Find/Jump to : Attacker, Defender, Calc, calc_mean, calc_range, calc_if_crit, calc_hits, run_calc
-
-
-##### !!!!!!!!!!!!!!!! LEFT FOR MATH REFERENCE >>> DO NOT USE !!!!!!!!!!!!!!!!! #####
-
+# Find/Jump to : Attacker, Defender, Calc, calc_if_crit, calc_if_hit, calc__hits, run_calc
 
 class Attacker(object):
     def __init__(
@@ -89,7 +85,7 @@ class Defender(object):
         self.evasion_debuffs = evasion_debuffs
         self.class_id = class_id
         self.species = species
-        # 100 = PvE
+        # class_id = 100 = PvE
 
 
 # -----------------------------------------------------------------
@@ -109,7 +105,8 @@ class Calc:
             + attacker.monster_ap
             + attacker.ap_combat_buffs
             - attacker.ap_debuffs
-            # 7-12 is knowledge AP?
+            - 8
+            # -8 = the min of the range of attack
         )
 
         self.t_acc_rate = (
@@ -119,14 +116,18 @@ class Calc:
             - attacker.acc_debuffs
         )
 
-        self.t_evasion_rate = (
+        self.defender_t_evasion_rate = (
             defender.evasion_rate
             + (defender.evasion * 0.21)
             + defender.evasion_combat_buffs
             - defender.evasion_debuffs
         )
 
-        self.t_dr = defender.dr + defender.dr_combat_buffs - defender.dr_debuffs
+        self.defender_t_dr = (
+            defender.dr + defender.dr_combat_buffs - defender.dr_debuffs
+        )
+
+        self.dr_rate = defender.dr_rate if defender.class_id != 100 else 0.8
 
         # ------------------------------
         # species damage aka +damage
@@ -141,139 +142,86 @@ class Calc:
             self.species_damage = attacker.other_damage
 
     # --------------------------------------------------------------------------
-    def calc_mean(self):
-        hit_value = self.skill["hit1"]["damage"]
-        e_ap_mean = self.t_ap - self.t_dr + (self.species_damage * 1.8)
-        species_ap_mean = 0
-        # -------------------------------------
-        # if e_ap_mean > 0:
-        #     e_ap_mean += self.species_damage * 1.8
-        # elif e_ap_mean < 0:
-        #     d_temp = self.species_damage - abs(e_ap_mean) / 2
-        #     species_ap_mean = (
-        #         d_temp * 2 + abs(e_ap_mean) / 2
-        #         if d_temp > 0
-        #         else self.species_damage / 2
-        #     )
-        #     e_ap_mean += species_ap_mean
-        # --------------------------------------
-
-        base_damage_mean = (self.t_ap + (self.species_damage * 1.8)) * (
-            hit_value / self.attacker.basic
-        )
-        hit_damage_mean = (
-            (e_ap_mean * hit_value) + base_damage_mean
-            if e_ap_mean > 0
-            else base_damage_mean
-        ) * 0.8
-        # -------------------------------------_
-        print("E_ap = ", e_ap_mean)
-        return round(hit_damage_mean)
-
-    # ------------------------------------------------------------------------------------------------
-    # =================================================================================
-    # ===============   Calc Range   =================================
-    # =================================================================================
-    def calc_range(self):
-
-        hit_value = self.skill["hit1"]["damage"]
-        e_ap_low = (self.t_ap - 8) - self.t_dr
-        e_ap_high = (self.t_ap + 8) - self.t_dr
-        # ----------------------------------------------------------------
-        base_damage_low = (self.t_ap - 4) * (hit_value / self.attacker.basic)
-        # ---------
-        base_damage_high = (self.t_ap + 4) * (hit_value / self.attacker.basic)
-        # ------------------------------
-        hit_damage_low = (
-            (((e_ap_low * hit_value) + base_damage_low) * 0.8)
-            + ((self.t_ap *(self.species_damage/500)) * hit_value)
-            if e_ap_low > 0
-            else base_damage_low * 0.8
-        )
-
-        hit_damage_high = (
-            (((e_ap_high * hit_value) + base_damage_high) * 0.8)
-            + ((self.t_ap *(self.species_damage/500)) * hit_value)
-            if e_ap_high > 0
-            else base_damage_high * 0.8
-        )
-        # ------------------------------
-        # crit range =
-        crit_range_low = hit_damage_low + hit_damage_low * (
-            1 + self.attacker.crit_damage
-        )
-        crit_range_high = hit_damage_high + hit_damage_high * (
-            1 + self.attacker.crit_damage
-        )
-        # ------------------------------
-        return [
-            round(hit_damage_low),
-            round(hit_damage_high),
-            round(crit_range_low),
-            round(crit_range_high),
-        ]
-
-    # --------------------------------------------------------------------------------------------
 
     # =================================================================================
     # =============== Crits =================================
     # =================================================================================
-    def calc_if_crit(self, hit_in, this_hit):
+    def calc_if_crit(self, hit_in):
         crit_chance = (
             self.attacker.crit_rate
             + self.attacker.crit_combat_buffs
             + hit_in["pvp_crit_rate"]
             if self.defender.class_id != 100
+            # ^ PvP
+            # > PvE :
             else self.attacker.crit_rate
             + self.attacker.crit_combat_buffs
             + hit_in["pve_crit_rate"]
         )
-        roll = random.randrange(0, 100)
+        crit_roll = random.randrange(0, 100)
 
-        return (
-            this_hit + this_hit * (1 + self.attacker.crit_damage)
-            if roll < (crit_chance * 100)
-            else this_hit
-        )
+        return True if crit_roll < (crit_chance * 100) else False
 
     # ---------------------------------------------------------------------------------------------
 
     # =================================================================================
-    # =============== Calc Random Hits =================================
+    # =============== Hit Calc =================================
     # =================================================================================
-    def calc_hits(self, hit_in):
+    def calc_if_hit(self):
+        hit_chance = self.t_acc_rate - self.defender_t_evasion_rate
+        hit_roll = random.randrange(0, 100)
+        return True if hit_roll > (hit_chance * 100) else False
+
+    # ---------------------------------------------------------------------------------------------
+
+    # =================================================================================
+    # =============== Core Calc =================================
+    # =================================================================================
+    def calc_hits(self, hit_in, core=True):
+        ap_range = ["Min, Max, Mean", 0, 16, 8]
         hit_value = hit_in["damage"]
-        hit_count = hit_in["hit_count"]
+        hit_count = 3 if core != True else hit_in["hit_count"]
         hit_counter = 1
         hits = []
         # ----------------------------------------
         while hit_counter <= hit_count:
-            e_ap = (
-                (self.t_ap - 10 + random.randrange(0, 20))
-                - self.t_dr
-                + (self.species_damage * 1.8)
+            did_hit = self.calc_if_hit(self)
+            if did_hit != True:
+                hits.append(0)
+                hit_counter += 1
+                continue 
+            is_crit = False if core != True else self.calc_if_crit(hit_in)
+            rand_range = 0 if is_crit != True else 8
+            ap_roll = (
+                self.t_ap + random.randrange(rand_range, 16)
+                if core == True
+                else self.t_ap + ap_range[hit_counter]
             )
-            # species_ap = 0
-            # if e_ap > 0:
-            #     e_ap += self.species_damage * 2
-            # elif e_ap < 0:
-            #     hd_temp = self.species_damage - abs(e_ap) / 2
-            #     species_ap = (
-            #         hd_temp * 2 + abs(e_ap) / 2
-            #         if hd_temp > 0
-            #         else self.species_damage / 2
-            #     )
-            #     e_ap += species_ap
+            e_ap = ap_roll - self.defender_t_dr
+            conversion = False
+            if e_ap < 0:
+                e_ap += self.species_damage
+                conversion = True
             # -------------------------------------
             # Core output calc !!!!!!!!!!!!!!!!!!!
-            base_damage = (
-                (self.t_ap - 10 + random.randrange(0, 20)) + (self.species_damage * 1.8)
-            ) * (hit_value / self.attacker.basic)
+            base_damage = (ap_roll) * (hit_value / self.attacker.basic)
+            bonus_damage = (
+                (self.t_ap * (self.species_damage / 500)) * hit_value
+                if conversion == False
+                else 0
+            )
+            dr_rate = self.dr_rate
+            # --- ^ modifiers ---
             hit_damage = (
-                (e_ap * hit_value) + base_damage if e_ap > 0 else base_damage
-            ) * 0.8
+                ((base_damage + (e_ap * hit_value)) * dr_rate) + bonus_damage
+                if e_ap > 0
+                else base_damage * dr_rate
+            )
             # !!!!!!!!!^^^^^^!!!!!!!!!!!!
-            hits.append(round(self.calc_if_crit(hit_in, hit_damage)))
+            if is_crit:
+                hits.append(round(hit_damage * (1 + self.attacker["crit_damage"])))
+            else:
+                hits.append(round(hit_damage))
             hit_counter += 1
         # -----------------------------------------
         hits.append(sum(hits))
@@ -284,8 +232,8 @@ class Calc:
     def run_calc(self):
         print("Running Calc V3")
         data = {
-            "Hit 1 mean": self.calc_mean(),
-            "Hit 1 range": self.calc_range(),
+            "Hit_1_range": self.calc_hits(self.skill["hit1"], core=False),
+            "Hit_1_mean": data["Hit_1_range"][2],
             "Hit1": self.calc_hits(self.skill["hit1"]),
             "Hit2": self.calc_hits(self.skill["hit2"])
             if self.skill["hit2"] != None
