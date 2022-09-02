@@ -185,11 +185,11 @@ class Calc:
         hits = []
         # ----------------------------------------
         while hit_counter <= hit_count:
-            did_hit = self.calc_if_hit(self)
-            if did_hit != True:
-                hits.append(0)
-                hit_counter += 1
-                continue 
+            # did_hit = self.calc_if_hit()
+            # if did_hit != True:
+            #     hits.append(0)
+            #     hit_counter += 1
+            #     continue 
             is_crit = False if core != True else self.calc_if_crit(hit_in)
             rand_range = 0 if is_crit != True else 8
             ap_roll = (
@@ -207,7 +207,7 @@ class Calc:
             base_damage = (ap_roll) * (hit_value / self.attacker.basic)
             bonus_damage = (
                 (self.t_ap * (self.species_damage / 500)) * hit_value
-                if conversion == False
+                if conversion != True
                 else 0
             )
             dr_rate = self.dr_rate
@@ -230,10 +230,10 @@ class Calc:
     # ---------------------------------------------------------------------------------------------------------------------------
 
     def run_calc(self):
-        print("Running Calc V3")
+        print("Running Calc V4")
         data = {
+            "Hit_1_mean": None,
             "Hit_1_range": self.calc_hits(self.skill["hit1"], core=False),
-            "Hit_1_mean": data["Hit_1_range"][2],
             "Hit1": self.calc_hits(self.skill["hit1"]),
             "Hit2": self.calc_hits(self.skill["hit2"])
             if self.skill["hit2"] != None
@@ -251,5 +251,8 @@ class Calc:
             if self.skill["hit6"] != None
             else None,
         }
-        print("range =", data["Hit 1 range"][0], "-", data["Hit 1 range"][1])
+        data['Hit_1_mean'] = data["Hit_1_range"][2],
+        data["Hit_1_range"].pop(3)
+        data["Hit_1_range"].pop(2)
+        print("range =", data["Hit_1_range"][0], "-", data["Hit_1_range"][1])
         return data
