@@ -233,7 +233,6 @@ class Calc:
     # ---------------------------------------------------------------------------------------------------------------------------
 
     def run_calc(self):
-        print("Running Calc V4")
         data = {
             "Hit_1_mean": None,
             "Hit_1_range": self.calc_hits(self.skill["hit1"], core=False),
@@ -257,5 +256,6 @@ class Calc:
         data['Hit_1_mean'] = data["Hit_1_range"][2],
         data["Hit_1_range"].pop(3)
         data["Hit_1_range"].pop(2)
-        print("range =", data["Hit_1_range"][0], "-", data["Hit_1_range"][1])
+        # print("Running Calc V4")
+        # print("range =", data["Hit_1_range"][0], "-", data["Hit_1_range"][1])
         return data

@@ -30,4 +30,4 @@ elvia_giants = Zone(84, "Elvia - Giants", "Calpheon", 695, 0, "human") # alt 730
 
 #new math verified
 manshaum_forest = Zone(33, "Manshaum Forest", "Kamasylvia", 350, 0, "kamasylvian") #  soft_ap cap at: 50eap ? 
-thornwood_forest = Zone(35, "Thornwood Forest", "O'dyllita", 375, 0, "kamasylvian") # soft_ap cap at: ?
+thornwood_forest = Zone(35, "Thornwood Forest", "O'dyllita", 375, 0, "kamasylvian") # !! DR CONFIRMED !! soft_ap cap at: 150eap
