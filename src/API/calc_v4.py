@@ -1,4 +1,5 @@
 import random
+from re import A
 
 # ------------------
 from __init__ import get_class_basic_skills_query
@@ -105,8 +106,8 @@ class Calc:
             + attacker.monster_ap
             + attacker.ap_combat_buffs
             - attacker.ap_debuffs
-            - 8
-            # -8 = the min of the range of attack
+            - 9
+            # -x = the min of the range of attack
         )
 
         self.t_acc_rate = (
@@ -178,7 +179,7 @@ class Calc:
     # =============== Core Calc =================================
     # =================================================================================
     def calc_hits(self, hit_in, core=True):
-        ap_range = ["Min, Max, Mean", 0, 16, 8]
+        ap_range = ["Min, Max, Mean", 0, 18, 9]
         hit_value = hit_in["damage"]
         hit_count = 3 if core != True else hit_in["hit_count"]
         hit_counter = 1
@@ -191,9 +192,9 @@ class Calc:
             #     hit_counter += 1
             #     continue 
             is_crit = False if core != True else self.calc_if_crit(hit_in)
-            rand_range = 0 if is_crit != True else 8
+            rand_range = 0 if is_crit != True else 9
             ap_roll = (
-                self.t_ap + random.randrange(rand_range, 16)
+                self.t_ap + random.randrange(rand_range, 18)
                 if core == True
                 else self.t_ap + ap_range[hit_counter]
             )
@@ -206,11 +207,13 @@ class Calc:
             # Core output calc !!!!!!!!!!!!!!!!!!!
             base_damage = (ap_roll) * (hit_value / self.attacker.basic)
             bonus_damage = (
-                (self.t_ap * (self.species_damage / 500)) * hit_value
+                (self.species_damage * hit_value)
                 if conversion != True
                 else 0
             )
-            dr_rate = self.dr_rate
+            rate = 0 if e_ap < 150 else 1
+            ap_softcap_rolloff = .0825 * rate
+            dr_rate = self.dr_rate if e_ap < 150 else self.dr_rate - ap_softcap_rolloff
             # --- ^ modifiers ---
             hit_damage = (
                 ((base_damage + (e_ap * hit_value)) * dr_rate) + bonus_damage
