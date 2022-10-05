@@ -7,3 +7,4 @@ Lib
 .exe
 __pycache__/
 *.pyc
+.venv

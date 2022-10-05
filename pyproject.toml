@@ -2,9 +2,9 @@
 name = "ynix_b"
 version = "0.1.0"
 description = "Web Server for Project_Ynix"
-authors = ["Josh S Wilkinson", "joshswilkinson@outlook.com"]
+authors = ["Josh S Wilkinson <joshswilkinson@outlook.com>"]
 packages = [
-    { include = "src" }
+    { include = "ynix_b" }
 ]
 
 [tool.poetry.dependencies]
@@ -17,5 +17,5 @@ uvicorn = "^0.18.2"
 python-dotenv = "^0.20.0"
 
 [tool.poetry.scripts]
-start_dev = 'API:main.py'
-seed_dev = 'DB:seed.py'
+start_dev = 'ynix_b:main'
+seed_dev = 'db:seed.py'

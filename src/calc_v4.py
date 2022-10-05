@@ -1,8 +1,9 @@
+"""Calc V4"""
 import random
 from re import A
 
 # ------------------
-from __init__ import get_class_basic_skills_query
+from ..db.queries import get_class_basic_skills_query
 
 # ----------------------------------------------------------------
 # Find/Jump to : Attacker, Defender, Calc, calc_if_crit, calc_if_hit, calc__hits, run_calc

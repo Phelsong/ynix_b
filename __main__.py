@@ -1,13 +1,13 @@
 import os
-
+# libs
 import uvicorn
-from calc_v4 import *
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+# imports
+from src.calc_v4 import *
+from db.queries import *
 
-from __init__ import *
-
-# -----------------------------------------------------------------------------
+# =============================================================================
 app = FastAPI()
 # -----------------------------------------------------------------------------
 origins = [
@@ -126,8 +126,6 @@ async def get_zone_info(zone_id):
 
 
 # ------------------------------------------------------------------------------
-api_dir = os.path.abspath("./src/API")
-db_dir = os.path.abspath("./src/DB")
 # production
 # if __name__ == "__main__":
 #     config = uvicorn.Config("main:app", host="0.0.0.0", port=(os.environ.get("PORT") or 8000))
@@ -139,8 +137,7 @@ if __name__ == "__main__":
         "main:app",
         host="0.0.0.0",
         port=(os.environ.get("PORT") or 8000),
-        reload=True,
-        reload_dirs=[api_dir, db_dir]
+        reload=True if os.getenv['ENVIROMENT'] == 'dev' else False 
     )
     server = uvicorn.Server(config)
     server.run()
