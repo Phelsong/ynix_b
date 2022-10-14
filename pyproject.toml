@@ -2,7 +2,7 @@
 name = "ynix_b"
 version = "0.1.0"
 description = "Web Server for Project_Ynix"
-authors = ["Josh S Wilkinson", "joshswilkinson@outlook.com"]
+authors = ["Josh S Wilkinson <joshswilkinson@outlook.com>"]
 packages = [
     { include = "src" }
 ]
