@@ -8,10 +8,10 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-
+# last updated on 10.24.2022
 python = "^3.10.6"
 pendulum = "^2.1.2"
-fastapi = "^0.79.0"
+fastapi = "0.85.1"
 psycopg = "^3.0.16"
 uvicorn = "^0.18.2"
 python-dotenv = "^0.20.0"
