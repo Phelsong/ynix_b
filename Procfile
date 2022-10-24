@@ -1,1 +1,0 @@
-web: python src/API/main.py

@@ -17,5 +17,5 @@ uvicorn = "^0.18.2"
 python-dotenv = "^0.20.0"
 
 [tool.poetry.scripts]
-start_dev = 'ynix_b:main'
+start_dev = 'main:server.run()'
 seed_dev = 'db:seed.py'

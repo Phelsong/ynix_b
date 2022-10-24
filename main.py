@@ -126,20 +126,14 @@ async def get_zone_info(zone_id):
 
 
 # ------------------------------------------------------------------------------
-# production
-# if __name__ == "__main__":
-#     config = uvicorn.Config("main:app", host="0.0.0.0", port=(os.environ.get("PORT") or 8000))
-#     server = uvicorn.Server(config)
-#     server.run()
-# dev
-if __name__ == "__main__":
-    config = uvicorn.Config(
+server_config = uvicorn.Config(
         "main:app",
         host="0.0.0.0",
         port=(os.environ.get("PORT") or 8000),
-        reload=True if os.getenv['ENVIROMENT'] == 'dev' else False 
+        reload=True if os.getenv['ENVIRONMENT'] == 'dev' else False 
     )
-    server = uvicorn.Server(config)
+server = uvicorn.Server(server_config)
+if __name__ == "__main__":
     server.run()
 
 #
