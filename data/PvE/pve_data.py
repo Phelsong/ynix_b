@@ -1,16 +1,18 @@
 #----------------------------------------------------------------------------
 zone_list = {}
 class Zone:
-    def __init__(self, id, name, region, dr, evasion, mob_type):
+    def __init__(self, id, name, region, dr, evasion, mob_type, soft_dr_cap=1000):
         self.id = id
         self.name = name
         self.region = region
         self.dr = dr
         self.evasion = evasion
         self.mob_type = mob_type
+        self.soft_dr_cap = soft_dr_cap
         zone_list.setdefault(self.name, self)
 
 #--------------------------------------------------------------------------
+# all data points actively being tested
 centaurus_herd = Zone(15, "Centaurus Herd", "Valencia", 340, 0, "demihuman")
 
 # castle_ruins_elvia = Zone(34, "Elvia - Castle Ruins", "Serendia", 0, 0, "human")
@@ -29,5 +31,5 @@ elvia_saunels = Zone(82, "Elvia - Saunels", "Calpheon", 630, 0, "demihuman")
 elvia_giants = Zone(84, "Elvia - Giants", "Calpheon", 695, 0, "human") # alt 730?
 
 #new math verified
-manshaum_forest = Zone(33, "Manshaum Forest", "Kamasylvia", 350, 0, "kamasylvian") #  soft_ap cap at: 50eap ? 
-thornwood_forest = Zone(35, "Thornwood Forest", "O'dyllita", 375, 0, "kamasylvian") # !! DR CONFIRMED !! soft_ap cap at: 150eap
+manshaum_forest = Zone(33, "Manshaum Forest", "Kamasylvia", 350, 0, "kamasylvian", 400) #  soft_ap cap at: 50eap ? 
+thornwood_forest = Zone(35, "Thornwood Forest", "O'dyllita", 375, 0, "kamasylvian", 500) # !! DR CONFIRMED !! soft_ap cap at: 150eap

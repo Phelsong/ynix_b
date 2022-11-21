@@ -1,96 +1,8 @@
 """Calc V4"""
 import random
-from re import A
-
-# ------------------
-from ..db.queries import get_class_basic_skills_query
 
 # ----------------------------------------------------------------
-# Find/Jump to : Attacker, Defender, Calc, calc_if_crit, calc_if_hit, calc__hits, run_calc
-
-class Attacker(object):
-    def __init__(
-        self,
-        class_id,
-        ap,
-        aap,
-        acc,
-        acc_rate,
-        crit_rate,
-        monster_ap,
-        kama_damage,
-        demi_damage,
-        human_damage,
-        other_damage,
-        crit_damage,
-        back_damage,
-        down_damage,
-        air_damage,
-        ap_combat_buffs,
-        crit_combat_buffs,
-        ap_debuffs,
-        acc_combat_buffs,
-        acc_debuffs,
-        human_damage_debuffs,
-    ):
-        self.class_id = class_id
-        self.ap = ap
-        self.aap = aap
-        self.acc = acc
-        self.acc_rate = acc_rate
-        self.crit_rate = crit_rate
-        self.monster_ap = monster_ap
-        self.kama_damage = kama_damage
-        self.demi_damage = demi_damage
-        self.human_damage = human_damage
-        self.other_damage = other_damage
-        self.crit_damage = crit_damage
-        self.back_damage = back_damage
-        self.down_damage = down_damage
-        self.air_damage = air_damage
-        self.ap_combat_buffs = ap_combat_buffs
-        self.crit_combat_buffs = crit_combat_buffs
-        self.ap_debuffs = ap_debuffs
-        self.acc_combat_buffs = acc_combat_buffs
-        self.acc_debuffs = acc_debuffs
-        self.human_damage_debuffs = human_damage_debuffs
-        self.t_ap = 0
-        self.t_aap = 0
-        [basic] = get_class_basic_skills_query(class_id)
-        self.basic = basic["skill_details"]["hit1"]["damage"]
-
-
-# ----------------------------------------------------------------
-
-
-class Defender(object):
-    def __init__(
-        self,
-        dr,
-        dr_rate,
-        evasion,
-        evasion_rate,
-        dr_combat_buffs,
-        dr_debuffs,
-        evasion_combat_buffs,
-        evasion_debuffs,
-        class_id,
-        species="other",
-    ):
-        self.dr = dr
-        self.dr_rate = dr_rate
-        self.evasion = evasion
-        self.evasion_rate = evasion_rate
-        self.dr_combat_buffs = dr_combat_buffs
-        self.dr_debuffs = dr_debuffs
-        self.evasion_combat_buffs = evasion_combat_buffs
-        self.evasion_debuffs = evasion_debuffs
-        self.class_id = class_id
-        self.species = species
-        # class_id = 100 = PvE
-
-
-# -----------------------------------------------------------------
+# Find/Jump to : calc_if_crit, calc_if_hit, calc__hits, run_calc
 
 
 class Calc:
@@ -191,7 +103,7 @@ class Calc:
             # if did_hit != True:
             #     hits.append(0)
             #     hit_counter += 1
-            #     continue 
+            #     continue
             is_crit = False if core != True else self.calc_if_crit(hit_in)
             rand_range = 0 if is_crit != True else 9
             ap_roll = (
@@ -208,12 +120,10 @@ class Calc:
             # Core output calc !!!!!!!!!!!!!!!!!!!
             base_damage = (ap_roll) * (hit_value / self.attacker.basic)
             bonus_damage = (
-                (self.species_damage * hit_value)
-                if conversion != True
-                else 0
+                (self.species_damage * hit_value) if conversion != True else 0
             )
             rate = 0 if e_ap < 150 else 1
-            ap_softcap_rolloff = .0825 * rate
+            ap_softcap_rolloff = 0.0825 * rate
             dr_rate = self.dr_rate if e_ap < 150 else self.dr_rate - ap_softcap_rolloff
             # --- ^ modifiers ---
             hit_damage = (
@@ -254,7 +164,7 @@ class Calc:
             if self.skill["hit6"] != None
             else None,
         }
-        data['Hit_1_mean'] = data["Hit_1_range"][2],
+        data["Hit_1_mean"] = (data["Hit_1_range"][2],)
         data["Hit_1_range"].pop(3)
         data["Hit_1_range"].pop(2)
         # print("Running Calc V4")

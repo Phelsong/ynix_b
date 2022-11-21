@@ -1,11 +1,16 @@
 import os
+
 # libs
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
 # imports
+from src.Attacker import Attacker
+from src.Defender import Defender
 from src.calc_v4 import *
 from db.queries import *
+
 
 # =============================================================================
 app = FastAPI()
@@ -67,41 +72,8 @@ async def get_class_skill(class_id, skill_id):
 
 @app.put("/basic_calc")
 async def basic_calc(attacker_in: dict, defender_in: dict, skill_id: tuple):
-    attacker = Attacker(
-        attacker_in["class_id"],
-        attacker_in["ap"],
-        attacker_in["aap"],
-        attacker_in["acc"],
-        attacker_in["acc_rate"],
-        attacker_in["crit_rate"],
-        attacker_in["monster_ap"],
-        attacker_in["kama_damage"],
-        attacker_in["demi_damage"],
-        attacker_in["human_damage"],
-        attacker_in["other_damage"],
-        attacker_in["crit_damage"],
-        attacker_in["back_damage"],
-        attacker_in["down_damage"],
-        attacker_in["air_damage"],
-        attacker_in["ap_combat_buffs"],
-        attacker_in["crit_combat_buffs"],
-        attacker_in["ap_debuffs"],
-        attacker_in["acc_combat_buffs"],
-        attacker_in["acc_debuffs"],
-        attacker_in["human_damage_debuffs"],
-    )
-    defender = Defender(
-        defender_in["dr"],
-        defender_in["dr_rate"],
-        defender_in["evasion"],
-        defender_in["evasion_rate"],
-        defender_in["dr_combat_buffs"],
-        defender_in["dr_debuffs"],
-        defender_in["evasion_combat_buffs"],
-        defender_in["evasion_debuffs"],
-        defender_in["class_id"],
-        defender_in["species"],
-    )
+    attacker = Attacker(attacker_in)
+    defender = Defender(defender_in)
     [skill] = get_skill_details_query(skill_id[0])
     calc = Calc(attacker, defender, skill["skill_details"])
     return calc.run_calc()
@@ -127,11 +99,11 @@ async def get_zone_info(zone_id):
 
 # ------------------------------------------------------------------------------
 server_config = uvicorn.Config(
-        "main:app",
-        host="0.0.0.0",
-        port=(os.environ.get("PORT") or 8000),
-        reload=True if os.getenv['ENVIRONMENT'] == 'dev' else False 
-    )
+    "main:app",
+    host="0.0.0.0",
+    port=(os.environ.get("PORT") or 8000),
+    reload=True if os.getenv["ENVIRONMENT"] == "dev" else False,
+)
 server = uvicorn.Server(server_config)
 if __name__ == "__main__":
     server.run()
