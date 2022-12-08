@@ -3,7 +3,7 @@
 import ujson
 
 # imports
-from connection import conn, cur
+from db.connection import conn, cur
 from data.character_classes.class_data import class_list, skill_list
 from data.PvE.pve_data import zone_list
 

@@ -6,7 +6,7 @@ import tomllib
 
 
 # ----------------------------------------------------------------
-with open("db\\env.toml", "rb") as f:
+with open(".\\db\\env.toml", "rb") as f:
     data = tomllib.load(f)
     config = data["DB_ENV"]
 # ----------------------------------------------------------------

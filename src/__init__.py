@@ -12,4 +12,6 @@
 # sys.modules[spec.name] = module 
 # spec.loader.exec_module(module)
 
-import calc_v4
+from .calc_v4 import *
+from .Attacker import *
+from .Defender import *

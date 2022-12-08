@@ -1,7 +1,7 @@
 import json
 
 # ----------------------------------------------------------------
-from .connection import conn, cur
+from db.connection import conn, cur
 
 # ----------------------------------------------------------------
 

@@ -102,7 +102,7 @@ server_config = uvicorn.Config(
     "main:app",
     host="0.0.0.0",
     port=(os.environ.get("PORT") or 8000),
-    reload=True if os.getenv["ENVIRONMENT"] == "dev" else False,
+    reload=True if os.getenv("ENVIRONMENT") == "dev" else False,
 )
 server = uvicorn.Server(server_config)
 if __name__ == "__main__":
