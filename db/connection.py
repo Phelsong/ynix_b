@@ -2,16 +2,18 @@ import os
 
 import psycopg
 from psycopg.rows import dict_row
-import tomllib
+# import tomllib
 
 
 # ----------------------------------------------------------------
-try:
-    with open(".\\db\\env.toml", "rb") as f:
-        data = tomllib.load(f)
-        config = data["DB_ENV"]
-except FileNotFoundError as e:
-    pass
+# try:
+#     with open(".\\db\\env.toml", "rb") as f:
+#         data = tomllib.load(f)
+#         config = data["DB_ENV"]
+# except FileNotFoundError as e:
+#     pass
+# ------
+data = None
 # ----------------------------------------------------------------
 conn = (
     psycopg.connect(
@@ -22,7 +24,7 @@ conn = (
         password=config["PASS_WORD"],
         row_factory=dict_row,
     )
-    if len(data) != 0
+    if data != None
     else psycopg.connect(conninfo=os.environ.get("DATABASE_URL"), row_factory=dict_row)
 )
 # alt_conn = psycopg.connect(
