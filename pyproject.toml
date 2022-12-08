@@ -1,10 +1,13 @@
 [tool.poetry]
 name = "ynix_b"
-version = "0.1.0"
+version = "0.0.1"
 description = "Web Server for Project_Ynix"
-authors = ["Josh S Wilkinson <joshswilkinson@outlook.com>"]
+authors = [
+    "Josh S Wilkinson <joshswilkinson@outlook.com>",
+]
+license = "MIT"
 packages = [
-    { include = "ynix_b" }
+    { include = "data" }, {include = "db"}, {include = "src"}
 ]
 
 [tool.poetry.dependencies]
@@ -12,14 +15,23 @@ packages = [
 python = "^3.10"
 pendulum = "^2.1.2"
 fastapi = "0.85.1"
-psycopg = "^3.0.16"
+psycopg = { extras = [
+    "binary",
+], version = "^3.1.4" }
 uvicorn = "^0.18.2"
 python-dotenv = "^0.20.0"
+ujson = "^5.6.0"
 
 [tool.poetry.scripts]
 start_dev = 'main:server.run()'
 seed_dev = 'db:seed.py'
 
 [tool.poetry.group.dev.dependencies]
-black = {version = "^22.10.0", allow-prereleases = true}
+black = { version = "^22.10.0", allow-prereleases = true }
+
+[build-system]
+requires = [
+    "poetry-core",
+]
+build-backend = "poetry.core.masonry.api"
 

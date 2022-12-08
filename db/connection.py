@@ -1,13 +1,14 @@
 import os
 
 import psycopg
-from dotenv import dotenv_values
 from psycopg.rows import dict_row
+import tomllib
+
 
 # ----------------------------------------------------------------
-config = dotenv_values(".env")
-
-
+with open("db\\env.toml", "rb") as f:
+    data = tomllib.load(f)
+    config = data["DB_ENV"]
 # ----------------------------------------------------------------
 conn = (
     psycopg.connect(
@@ -18,7 +19,7 @@ conn = (
         password=config["PASS_WORD"],
         row_factory=dict_row,
     )
-    if len(config) != 0
+    if len(data) != 0
     else psycopg.connect(conninfo=os.environ.get("DATABASE_URL"), row_factory=dict_row)
 )
 # alt_conn = psycopg.connect(

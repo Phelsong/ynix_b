@@ -1,4 +1,5 @@
 .env
+env.toml
 .yarn/cache
 node_modules
 notes.md

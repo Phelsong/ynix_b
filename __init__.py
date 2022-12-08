@@ -1,3 +1,5 @@
 #start here
-import db
-import src
+from .data import *
+from .db import *
+from .src import *
+

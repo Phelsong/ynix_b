@@ -1,12 +1,17 @@
-import json
+""" db seed"""
+# libs
+import ujson
 
+# imports
 from connection import conn, cur
-from data import class_list, skill_list, zone_list
+from data.character_classes.class_data import class_list, skill_list
+from data.PvE.pve_data import zone_list
 
 # ----------------------------------------------------------------
 
 
 def drop_tables():
+    """drops existing tables"""
     cur.execute(
         """
                    DROP TABLE IF EXISTS zones;
@@ -17,8 +22,10 @@ def drop_tables():
                    """
     )
 
-#----------------------------------------------------------------
+
+# ----------------------------------------------------------------
 def create_tables():
+    """creates new table structure"""
     cur.execute(
         """CREATE TABLE users 
                     (user_id SERIAL PRIMARY KEY
@@ -52,9 +59,14 @@ def create_tables():
                 zone_evasion INT,
                 mob_type VARCHAR(200) NOT NULL);"""
     )
-#----------------------------------------------------------------
+
+
+# ----------------------------------------------------------------
+
 
 def class_seed():
+    """ populates the database with initial data """
+
     for char in class_list.values():
         cur.execute(
             """INSERT INTO classes (class_id, class_name)
@@ -63,15 +75,18 @@ def class_seed():
         )
 
     for skill in skill_list.values():
-        details = json.dumps(skill.__dict__)
+        details = ujson.dumps(skill.__dict__)
         cur.execute(
             """INSERT INTO class_skills (skill_id, class_id, skill_name, skill_details)
                     values (%s , %s, %s, %s)""",
             (skill.id, skill.class_id, skill.name, details),
         )
 
-#----------------------------------------------------------------
+
+# ----------------------------------------------------------------
 def zone_seed():
+    """ populates the database with initial data """
+
     for zone in zone_list.values():
         cur.execute(
             """INSERT INTO zones (zone_id, zone_name, region, zone_dr, zone_evasion, mob_type)
@@ -81,10 +96,11 @@ def zone_seed():
 
 
 # ----------------------------------------------------------------
-drop_tables()
-create_tables()
-class_seed()
-zone_seed()
-conn.commit()
-conn.close()
+if __name__ == "__main__":
+    drop_tables()
+    create_tables()
+    class_seed()
+    zone_seed()
+    conn.commit()
+    conn.close()
 # ----------------------------------------------------------------
