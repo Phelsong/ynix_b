@@ -12,7 +12,7 @@ packages = [
 
 [tool.poetry.dependencies]
 # last updated on 10.24.2022
-python = "^3.10"
+python = ">=3.10.7"
 pendulum = "^2.1.2"
 fastapi = "0.85.1"
 psycopg = { extras = [
