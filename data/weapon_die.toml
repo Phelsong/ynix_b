@@ -1,0 +1,29 @@
+[[MainHands]]
+[Unarmed]
+weapon_tooltip = N/A
+die = 5
+offset = -3
+[Offin]
+weapon_tooltip = 136-138
+die = 7
+offset = -4
+[Old]
+weapon_tooltip = 6-10
+die = 9
+offset = -5
+[Kzarka]
+weapon_tooltip = 18-22
+die = 9
+offset = -5
+[Blackstar]
+weapon_tooltip = 22-28
+die = 11
+offset = -6
+[Yuria]
+weapon_tooltip = 122-131
+die = 14
+offset = -7
+[Ain]
+weapon_tooltip = 116-124
+die = 13
+offset = -7

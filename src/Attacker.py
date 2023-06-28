@@ -1,6 +1,7 @@
 """ Attacker Object"""
 from db.queries import get_class_basic_skills_query
 
+
 # ------------------------------
 class Attacker(object):
     def __init__(self, attacker_in):

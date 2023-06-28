@@ -12,4 +12,6 @@ class Defender(object):
         self.evasion_debuffs = defender_in["evasion_debuffs"]
         self.class_id = defender_in["class_id"]
         self.species = defender_in["species"]
+        self.ap_cap = defender_in["ap_cap"]
+        self.cap_modifier = defender_in["cap_modifier"]
         # class_id = 100 = PvE
