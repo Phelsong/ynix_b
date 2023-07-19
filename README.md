@@ -6,3 +6,7 @@
 
 * FastAPI
 * Postgres
+
+### Links
+* https://github.com/Phelsong/ynix_app
+* https://github.com/Phelsong/ynix_b
