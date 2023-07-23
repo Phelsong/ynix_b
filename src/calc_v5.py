@@ -5,9 +5,9 @@ import pandas as pd
 from random import randint
 
 # imports
-from src.calc.die_calc import roll_range, roll_die
-from src.calc.dr_calc import get_dr_range
-from src.calc.ap_calc import (
+from src.calc.calc_die import roll_range, roll_die
+from src.calc.calc_dr import get_dr_range
+from src.calc.calc_ap import (
     get_ap_range,
     get_species_ap_range,
     get_base_damage,
@@ -41,7 +41,7 @@ class CalcV5:
     # ---------------------------------------------------------------
     def _run_pve(self, profile, skill, run_length=1):
         """Simulates damage for a given profile and skill"""
-        dataset = {}
+        dataset: dict = {}
         for i in range(run_length):
             hit_roll = self._calc_damage(profile, skill)
             dataset.setdefault(f"hit_{i}", hit_roll)
@@ -62,13 +62,13 @@ class CalcV5:
         (ap_cap + cap_modifier * overcap_ap - enemy_dr + species) above the cap.
         All damage is then scaled by skill_percent."""
         # --------------
-        rolled_ap = roll_range(profile["min_ap"], profile["max_ap"])
-        rolled_species_ap = roll_range(
+        rolled_ap: int = roll_range(profile["min_ap"], profile["max_ap"])
+        rolled_species_ap: int = roll_range(
             profile["min_species_ap"], profile["max_species_ap"]
         )
         # --------------
-        overcap_ap = calc_overcap_ap(rolled_ap, profile["ap_cap"])
-        scalar_ap = rolled_ap - profile["dr"] + rolled_species_ap
+        overcap_ap: int = calc_overcap_ap(rolled_ap, profile["ap_cap"])
+        scalar_ap: int = rolled_ap - profile["dr"] + rolled_species_ap
         # -------------
         # This check is equivalent to eap_damage < 0.05 * ap_value
         # but is faster with no floating point issues
@@ -76,8 +76,8 @@ class CalcV5:
             # Use the base damage formula
             return get_base_damage(rolled_ap, skill)
 
-        e_ap = scalar_ap + (overcap_ap * profile["cap_modifier"])
-        scaled_damage = e_ap * skill // 100
+        e_ap: int = scalar_ap + (overcap_ap * profile["cap_modifier"])
+        scaled_damage: int = e_ap * skill // 100
         return scaled_damage
 
     # ---------------------------------------------------------------

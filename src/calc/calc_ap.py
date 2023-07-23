@@ -2,6 +2,7 @@
 # libs
 
 # imports
+from re import T
 from src.calc.calc_die import roll_die
 
 
@@ -45,7 +46,7 @@ def get_base_damage(ap_value, skill_percent) -> float:
 # ===========================================================================
 
 
-def get_species_ap_range(species_damage) -> Tuple[int, int]:
+def get_species_ap_range(species_damage) -> tuple[int, int]:
     min_species_ap = 7 * species_damage // 10
     return min_species_ap, species_damage
 

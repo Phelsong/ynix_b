@@ -15,7 +15,7 @@ def roll_dr(dr_value, min_dr, max_dr) -> int:
 
 
 # ======================================================
-def get_dr_range(dr_value) -> Tuple[int, int]:
+def get_dr_range(dr_value) -> tuple[int, int]:
     """Calculates (min_dr, max_dr) applied in PvP for the given 'dr_value'"""
     min_shred = 3 * dr_value // 20
     max_shred = dr_value // 3

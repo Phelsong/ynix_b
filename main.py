@@ -9,7 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from src.Attacker import Attacker
 from src.Defender import Defender
 from src.calc_v5 import the_calc
-from db.queries import *
+# from db.queries import *
 
 
 # =============================================================================
