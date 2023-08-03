@@ -1,7 +1,7 @@
 from .class_data import Class, Hit, Skill
 
 # ----------------------------------------------------------------
-maegu = Class(id=99, name="Maegu", dr=0, evasion=0)
+maegu = Class(id=26, name="Maegu", dr=0, evasion=0)
 # id = class ID xx = pre | 3xx = prime | 5xx = awk | 9xx = rabams
 # ----------------------------------------------------------------
 Tal = Skill(

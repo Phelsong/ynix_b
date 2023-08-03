@@ -27,7 +27,7 @@ def drop_tables():
 def create_tables():
     """creates new table structure"""
     cur.execute(
-        """CREATE TABLE users 
+        """CREATE TABLE users
                     (user_id SERIAL PRIMARY KEY
                     , username varchar(100) NOT NULL,
                     password varchar(200))"""
@@ -54,10 +54,15 @@ def create_tables():
         """CREATE TABLE zones
                 (zone_id INT PRIMARY KEY,
                 zone_name VARCHAR(200) NOT NULL,
+                mob_type VARCHAR(200) NOT NULL,
                 region VARCHAR(200) NOT NULL,
-                zone_dr INT,
-                zone_evasion INT,
-                mob_type VARCHAR(200) NOT NULL);"""
+                zone_recommended_ap INT NOT NULL,
+                zone_dr_breakpoint INT NOT NULL,
+                zone_dr INT NOT NULL,
+                zone_ap_cap INT NOT NULL, 
+                zone_dr_cap_mod float4 NOT NULL, 
+                zone_evasion INT
+                );"""
     )
 
 
@@ -65,7 +70,7 @@ def create_tables():
 
 
 def class_seed():
-    """ populates the database with initial data """
+    """populates the database with initial data"""
 
     for char in class_list.values():
         cur.execute(
@@ -85,13 +90,24 @@ def class_seed():
 
 # ----------------------------------------------------------------
 def zone_seed():
-    """ populates the database with initial data """
+    """populates the database with initial data"""
 
     for zone in zone_list.values():
         cur.execute(
-            """INSERT INTO zones (zone_id, zone_name, region, zone_dr, zone_evasion, mob_type)
-                VALUES ( %s , %s , %s , %s , %s , %s )""",
-            (zone.id, zone.name, zone.region, zone.dr, zone.evasion, zone.mob_type),
+            """INSERT INTO zones (zone_id, zone_name, mob_type, region, zone_recommended_ap, zone_dr_breakpoint,  zone_dr, zone_ap_cap, zone_dr_cap_mod, zone_evasion)
+                VALUES ( %s , %s , %s , %s , %s , %s, %s, %s, %s, %s )""",
+            (
+                zone.id,
+                zone.name,
+                zone.mob_type,
+                zone.region,
+                zone.recommended_ap,
+                zone.dr_breakpoint,
+                zone.dr,
+                zone.ap_cap,
+                zone.dr_cap_mod,
+                zone.evasion,
+            ),
         )
 
 

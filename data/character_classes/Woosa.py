@@ -1,7 +1,7 @@
 from .class_data import Class, Hit, Skill
 
 # ----------------------------------------------------------------
-woosa = Class(id=99, name="Woosa", dr=0, evasion=0)
+woosa = Class(id=25, name="Woosa", dr=0, evasion=0)
 # id = class ID xx = pre | 3xx = prime | 5xx = awk | 9xx = rabams
 # ----------------------------------------------------------------
 Fan = Skill(

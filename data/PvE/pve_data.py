@@ -1,35 +1,57 @@
-#----------------------------------------------------------------------------
-zone_list = {}
+import pandas as pd
+
+# ----------------------------------------------------------------------------
+
+
 class Zone:
-    def __init__(self, id, name, region, dr, evasion, mob_type, soft_dr_cap=1000):
-        self.id = id
-        self.name = name
-        self.region = region
-        self.dr = dr
-        self.evasion = evasion
-        self.mob_type = mob_type
-        self.soft_dr_cap = soft_dr_cap
+    """Zone template for DB entry. Stuctured to Throw soft errors for invalid data intentional"""
+
+    def __init__(
+        self,
+        name,
+        *,
+        id: int = 9999,  #! type:ignore
+        recommended_ap: int = 9999,
+        region: str = "todo",
+        dr: int = 0,
+        dr_breakpoint: int = 0,
+        mob_type: str = "monster",
+        ap_cap: int = 1000,
+        dr_cap_mod: float = 0.7,
+        evasion: int = 0,
+    ):
+        self.name: str = name
+        self.id: int = id
+        self.mob_type: str = mob_type
+        self.region: str = region
+        self.recommended_ap: int = recommended_ap
+        self.dr_breakpoint: int = dr_breakpoint
+        self.ap_cap: int = ap_cap
+        self.dr: int = dr
+        self.dr_cap_mod: float = dr_cap_mod
+        self.evasion: int = evasion
         zone_list.setdefault(self.name, self)
 
-#--------------------------------------------------------------------------
-# all data points actively being tested
-centaurus_herd = Zone(15, "Centaurus Herd", "Valencia", 340, 0, "demihuman")
 
-# castle_ruins_elvia = Zone(34, "Elvia - Castle Ruins", "Serendia", 0, 0, "human")
+# =======================================================
+zone_list: dict[str, Zone] = {}
+
+# ================================================================
+
+solo = pd.read_csv("X:/0.code/ynix_b/data/PvE/solo_spots.csv")
+party = pd.read_csv("X:/0.code/ynix_b/data/PvE/party_spots.csv")
+spots = pd.merge(solo, party, how="outer")
+spots.sort_values("Recommended", inplace=True, ignore_index=True)
 
 
-tunkuta = Zone(44, "Turos", "O'dyllita", 460, 0, "kamasylvian")
-elvia_fogans = Zone(65, "Elvia - Fogans", "Calpheon", 480, 0, "other")
-elvia_orcs = Zone(75, "Elvia - Orcs", "Calpheon", 640, 0, "demihuman") #lights are -130dr
-
-gyfin_underground = Zone(96, "Gyfin Underground", "Kamasylvia", 600, 0, "kamasylvian")
-olun_valley = Zone(97, "Olun Valley", "O'dyllita", 490, 0, "kamasylvian")
-elvia_hexe_sanctuary = Zone(98, "Elvia - Hexe Sanctuary", "Calpheon", 800, 0, "other")
-crypt_of_resting_thoughts = Zone(99, "Crypt of Resting Thoughts", "Kamasylvia", 465, 0, "kamasylvian") # soft_ap cap at: 300? - damage
-elvia_quint_hill = Zone(100, "Elvia - Quint Hill", "Calpheon", 800, 0, "demihuman") #?
-elvia_saunels = Zone(82, "Elvia - Saunels", "Calpheon", 630, 0, "demihuman")
-elvia_giants = Zone(84, "Elvia - Giants", "Calpheon", 695, 0, "human") # alt 730?
-
-#new math verified
-manshaum_forest = Zone(33, "Manshaum Forest", "Kamasylvia", 350, 0, "kamasylvian", 400) #  soft_ap cap at: 50eap ? 
-thornwood_forest = Zone(35, "Thornwood Forest", "O'dyllita", 375, 0, "kamasylvian", 500) # !! DR CONFIRMED !! soft_ap cap at: 150eap
+for idx, row in spots.iterrows():
+    Zone(
+        name=row["Grindspot"],
+        id=idx + 1,
+        mob_type=row["Mob_Type"],
+        recommended_ap=row["Recommended"],
+        dr_breakpoint=row["DR_Breakpoint"],
+        dr=row["Actual_Mob_DR"],
+        ap_cap=row["AP_Cap"],
+        dr_cap_mod=row["Modifier"],
+    )
