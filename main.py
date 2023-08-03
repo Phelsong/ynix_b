@@ -9,7 +9,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from src.Attacker import Attacker
 from src.Defender import Defender
 from src.calc_v5 import the_calc
-# from db.queries import *
+
+from db.queries import *
 
 
 # =============================================================================
@@ -35,7 +36,7 @@ app.add_middleware(
 # -----------------------------------------------------------------------------
 
 
-@app.get("/api")
+@app.get("/health")
 def health_check():
     return {"Server Status": "You've got Py"}
 
@@ -74,9 +75,9 @@ async def get_class_skill(class_id, skill_id):
 async def basic_calc(attacker_in: dict, defender_in: dict, skill_id: tuple):
     attacker = Attacker(attacker_in)
     defender = Defender(defender_in)
+    print(attacker, defender)
     [skill] = get_skill_details_query(skill_id[0])
-
-    return the_calc.simulate_damage(attacker, defender, skill)
+    # return the_calc.simulate_damage(attacker, defender, skill)
 
 
 # ------------------------------------------------------------------------------

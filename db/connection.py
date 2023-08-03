@@ -8,7 +8,7 @@ import tomllib
 
 # ----------------------------------------------------------------
 try:
-    with open("env.toml", "rb") as f:
+    with open("X:/0.code/ynix_b/db/env.toml", "rb") as f:
         data = tomllib.load(f)
         config = data["DB_ENV"]
 except ValueError as e:

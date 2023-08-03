@@ -4,7 +4,8 @@ import pandas as pd
 
 
 class ClassMod:
-    """Class vs Class PvP Modifiers"""
+    """Class vs Class PvP Modifiers
+    https://www.naeu.playblackdesert.com/en-US/Wiki?wikiNo=225"""
 
     def __init__(self, name: str, *, classes):
         self.name = name

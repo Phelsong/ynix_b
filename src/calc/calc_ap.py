@@ -8,7 +8,8 @@ from src.calc.calc_die import roll_die
 
 # ===========================================================================
 def get_ap_range(attacker):
-    return attacker.ap
+    # TODO: this is probably the normal roll
+    return attacker.ap, attacker.ap
 
 
 def roll_ap(profile):

@@ -7,7 +7,9 @@ authors = [
 ]
 license = "MIT"
 packages = [
-    { include = "data" }, {include = "db"}, {include = "src"}
+    { include = "data" },
+    { include = "db" },
+    { include = "src" },
 ]
 
 [tool.poetry.dependencies]
@@ -27,6 +29,7 @@ python-multipart = "^0.0.6"
 [tool.poetry.scripts]
 start_dev = 'main:server.run'
 seed_dev = 'db:seed.py'
+test_calc = 'tests:test_calc.run_calc_test'
 
 [tool.poetry.group.dev.dependencies]
 black = { version = "^22.10.0", allow-prereleases = true }
@@ -36,4 +39,3 @@ requires = [
     "poetry-core",
 ]
 build-backend = "poetry.core.masonry.api"
-
