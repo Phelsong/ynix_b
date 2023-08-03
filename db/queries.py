@@ -7,6 +7,7 @@ from db.connection import conn, cur
 
 test = "test"
 
+
 def get_class_list_query():
     cur.execute("""SELECT * FROM classes""")
     return cur.fetchall()

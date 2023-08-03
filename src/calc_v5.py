@@ -5,6 +5,8 @@ import pandas as pd
 from random import randint
 
 # imports
+from src.Attacker import Attacker
+from src.Defender import Defender
 from src.calc.calc_die import roll_range, roll_die
 from src.calc.calc_dr import get_dr_range
 from src.calc.calc_ap import (
@@ -19,7 +21,14 @@ class CalcV5:
     """Contains damage calculation formulas and helpers
     Credit: @Honuamea for the Formula"""
 
-    def simulate_damage(self, attacker, defender, skill, target, run_length=1):
+    def simulate_damage(
+        self,
+        attacker: Attacker,
+        defender: Defender,
+        skill: dict,
+        run_length=1,
+        run_type=1,
+    ) -> dict:
         profile = {
             "min_ap": 0,
             "max_ap": 0,
@@ -30,27 +39,32 @@ class CalcV5:
             "cap_modifier": defender.cap_modifier,
         }
         profile["min_ap"], profile["max_ap"] = get_ap_range(attacker)
+        # TODO: implement species check
+        attacker_vs_species = self._defender_species(attacker, defender)
         profile["min_species_ap"], profile["max_species_ap"] = get_species_ap_range(
-            attacker, defender
+            attacker_vs_species
         )
         profile["dr"] = defender.dr - defender.dr_debuffs
-
-        # if run_type == "pve":
-        self._run_pve(profile, skill)
+        if run_type == 1:
+            return self._run_pve(profile, skill)
+        if run_type == 2:
+            pass
+            # return self._run_pvp(profile, skill)
+        # catch all
+        return {"error": "invalid parameters"}
 
     # ---------------------------------------------------------------
     def _run_pve(self, profile, skill, run_length=1):
         """Simulates damage for a given profile and skill"""
         dataset: dict = {}
         for i in range(run_length):
-            hit_roll = self._calc_damage(profile, skill)
-            dataset.setdefault(f"hit_{i}", hit_roll)
-
+            hit_roll = self._calc_damage(profile, skill["hit1"])
+            dataset.setdefault(f"hit_{i+1}", hit_roll)
         return dataset
 
     # ---------------------------------------------------------------
 
-    def _run_pvp(self, attacker, defender, skill):
+    def _run_pvp(self, profile, skill):
         pass
 
     # ----------------------------------------------------------------
@@ -74,16 +88,18 @@ class CalcV5:
         # but is faster with no floating point issues
         if 20 * scalar_ap < rolled_ap:
             # Use the base damage formula
-            return get_base_damage(rolled_ap, skill)
+            print("returning base damage")
+            return get_base_damage(rolled_ap, skill["damage"])
 
         e_ap: int = scalar_ap + (overcap_ap * profile["cap_modifier"])
-        scaled_damage: int = e_ap * skill // 100
+        scaled_damage: int = e_ap * skill["damage"]
+
         return scaled_damage
 
     # ---------------------------------------------------------------
 
     # ---------------------------------------------------------------
-    def get_median_eap_damage(ap_value, enemy_dr, skill_percent, species_ap=0):
+    def get_median_eap_damage(self, ap_value, enemy_dr, skill_percent, species_ap=0):
         """Calculates damage below any AP cap. Note that AP & species AP inputs are
         both post-roll. This function should only be used over 'get_damage' when
         the AP Cap is not known."""
@@ -98,13 +114,20 @@ class CalcV5:
 
     # ---------------------------------------------------------------
 
+    def _defender_species(self, attacker, defender) -> int:
+        if defender.species == "human":
+            return attacker.human_damage
+        elif defender.species == "demihuman":
+            return attacker.demi_damage
+        elif defender.species == "kamasylvian":
+            return attacker.kama_damage
+        elif defender.species == "other":
+            return attacker.other_damage
+
 
 # ================================
 
 the_calc = CalcV5()
-
-
-print("test debugger")
 
 
 # def __init__(self, attacker, defender, skill):
