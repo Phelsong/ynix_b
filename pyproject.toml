@@ -14,16 +14,18 @@ packages = [
 # last updated on 10.24.2022
 python = ">=3.10.7"
 pendulum = "^2.1.2"
-fastapi = "0.85.1"
-psycopg = { extras = [
-    "binary",
-], version = "^3.1.4" }
-uvicorn = "^0.18.2"
+fastapi = "^0.100.0"
+psycopg = "^3.1.9"
+uvicorn = "^0.23.1"
 python-dotenv = "^0.20.0"
-ujson = "^5.6.0"
+ujson = "^5.8.0"
+numpy = "^1.25.1"
+pandas = "^2.0.3"
+psycopg-binary = "^3.1.9"
+python-multipart = "^0.0.6"
 
 [tool.poetry.scripts]
-start_dev = 'main:server.run()'
+start_dev = 'main:server.run'
 seed_dev = 'db:seed.py'
 
 [tool.poetry.group.dev.dependencies]

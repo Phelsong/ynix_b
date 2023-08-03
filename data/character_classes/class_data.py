@@ -93,6 +93,8 @@ from .Valkyrie import *
 from .Warrior import *
 from .Witch import *
 from .Wizard import *
+from .Woosa import *
+from .Maegu import *
 
 # list variables are for seed functions
 # -------------------------------------------------------------------------------

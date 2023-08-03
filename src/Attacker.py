@@ -1,5 +1,5 @@
 """ Attacker Object"""
-from db.queries import get_class_basic_skills_query
+# from db.queries import get_class_basic_skills_query
 
 
 # ------------------------------
@@ -28,5 +28,5 @@ class Attacker(object):
         self.human_damage_debuffs = attacker_in["human_damage_debuffs"]
         self.t_ap = 0
         self.t_aap = 0
-        [basic] = get_class_basic_skills_query(self.class_id)
-        self.basic = basic["skill_details"]["hit1"]["damage"]
+        # [basic] = get_class_basic_skills_query(self.class_id)
+        # self.basic = basic["skill_details"]["hit1"]["damage"]
