@@ -102,6 +102,11 @@ class CalcV5:
 # ================================
 
 the_calc = CalcV5()
+
+
+print("test debugger")
+
+
 # def __init__(self, attacker, defender, skill):
 #     self.attacker = attacker
 #     self.defender = defender
