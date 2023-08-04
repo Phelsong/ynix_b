@@ -81,9 +81,9 @@ async def get_class_skill(class_id, skill_id):
 
 @app.put("/basic_calc")
 async def basic_calc(attacker_in: dict, defender_in: dict, skill_id: tuple):
+    print(attacker_in, defender_in)
     attacker = Attacker(attacker_in)
     defender = Defender(defender_in)
-    print(attacker, defender)
     [skill] = get_skill_details_query(skill_id[0])
     return the_calc.simulate_damage(attacker, defender, skill)
 
@@ -110,7 +110,7 @@ async def get_zone_info(zone_id):
 server_config = uvicorn.Config(
     "main:app",
     host="0.0.0.0",
-    port=(os.environ.get("PORT") or 8000),
+    port=(os.environ.get("PORT") or 8321),
     reload=True if os.getenv("ENVIRONMENT") == "dev" else False,
 )
 server = uvicorn.Server(server_config)
