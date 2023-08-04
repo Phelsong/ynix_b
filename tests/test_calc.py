@@ -1,11 +1,13 @@
+from typing import Any
+
 from src.calc_v5 import the_calc
 from src.Attacker import Attacker
 from src.Defender import Defender
 from db.queries import get_skill_details_query
 
 
-def run_calc_test():
-    attacker_in = {
+def run_calc_test() -> None:
+    attacker_in: dict[str, int | float | str] = {
         "class_id": 18,
         "ap": 600,
         "aap": 0,
@@ -28,7 +30,7 @@ def run_calc_test():
         "acc_debuffs": 0,
         "human_damage_debuffs": 0,
     }
-    defender_in = {
+    defender_in: dict[str, int | float | str] = {
         "dr": 430,
         "dr_rate": 0,
         "evasion": 0,

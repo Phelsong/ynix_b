@@ -3,6 +3,7 @@
 import numpy as np
 import pandas as pd
 from random import randint
+from typing import Any
 
 # imports
 from src.Attacker import Attacker
@@ -26,10 +27,12 @@ class CalcV5:
         attacker: Attacker,
         defender: Defender,
         skill: dict,
-        run_length=1,
+        run_length: int = 1,
         run_type=1,
-    ) -> dict:
-        profile = {
+    ) -> dict[str, int | float | Any]:
+        # ----------
+
+        profile: dict[str, int | float] = {
             "min_ap": 0,
             "max_ap": 0,
             "min_species_ap": 0,
@@ -39,73 +42,30 @@ class CalcV5:
             "cap_modifier": defender.cap_modifier,
         }
         profile["min_ap"], profile["max_ap"] = get_ap_range(attacker)
-        # TODO: implement species check
+        profile["dr"] = defender.dr - defender.dr_debuffs
+
         attacker_vs_species = self._defender_species(attacker, defender)
         profile["min_species_ap"], profile["max_species_ap"] = get_species_ap_range(
             attacker_vs_species
         )
-        profile["dr"] = defender.dr - defender.dr_debuffs
+
         if run_type == 1:
-            return self._run_pve(profile, skill)
-        if run_type == 2:
-            pass
+            return self._run_pve(profile=profile, skill=skill)
+        elif run_type == 2:
+            return {"pvp": 0}
             # return self._run_pvp(profile, skill)
-        # catch all
-        return {"error": "invalid parameters"}
-
-    # ---------------------------------------------------------------
-    def _run_pve(self, profile, skill, run_length=1):
-        """Simulates damage for a given profile and skill"""
-        dataset: dict = {}
-        for i in range(run_length):
-            hit_roll = self._calc_damage(profile, skill["hit1"])
-            dataset.setdefault(f"hit_{i+1}", hit_roll)
-        return dataset
-
-    # ---------------------------------------------------------------
-
-    def _run_pvp(self, profile, skill):
-        pass
-
-    # ----------------------------------------------------------------
-    # Damage calculations
-    def _calc_damage(self, profile, skill):
-        """General damage formula to be used if all input values are known.
-        Applies base damage (5% of AP) below DR breakpoint, EAP damage
-        (AP - DR + species) until any cap, and cap damage
-        (ap_cap + cap_modifier * overcap_ap - enemy_dr + species) above the cap.
-        All damage is then scaled by skill_percent."""
-        # --------------
-        rolled_ap: int = roll_range(profile["min_ap"], profile["max_ap"])
-        rolled_species_ap: int = roll_range(
-            profile["min_species_ap"], profile["max_species_ap"]
-        )
-        # --------------
-        overcap_ap: int = calc_overcap_ap(rolled_ap, profile["ap_cap"])
-        scalar_ap: int = rolled_ap - profile["dr"] + rolled_species_ap
-        # -------------
-        # This check is equivalent to eap_damage < 0.05 * ap_value
-        # but is faster with no floating point issues
-        if 20 * scalar_ap < rolled_ap:
-            # Use the base damage formula
-            print("returning base damage")
-            return get_base_damage(rolled_ap, skill["damage"])
-
-        e_ap: int = scalar_ap + (overcap_ap * profile["cap_modifier"])
-        scaled_damage: int = e_ap * skill["damage"]
-
-        return scaled_damage
-
-    # ---------------------------------------------------------------
+        else:
+            return {"error": "invalid parameters"}
 
     # ---------------------------------------------------------------
     def get_median_eap_damage(self, ap_value, enemy_dr, skill_percent, species_ap=0):
         """Calculates damage below any AP cap. Note that AP & species AP inputs are
         both post-roll. This function should only be used over 'get_damage' when
         the AP Cap is not known."""
+
         eap_damage = ap_value - enemy_dr + species_ap
+
         # This check is equivalent to eap_damage < 0.05 * ap_value
-        # but is faster with no floating point issues
         if 20 * eap_damage < ap_value:
             # Use the base damage formula
             return get_base_damage(ap_value, skill_percent)
@@ -114,14 +74,63 @@ class CalcV5:
 
     # ---------------------------------------------------------------
 
-    def _defender_species(self, attacker, defender) -> int:
+    def _run_pve(self, profile, skill, run_length=1):
+        """Simulates damage for a given profile and skill"""
+
+        dataset: dict[str, int | float] = {}
+
+        for i in range(run_length):
+            hit_roll = self._calc_damage(profile=profile, skill=skill["hit1"])
+            dataset.setdefault(f"hit_{i+1}", hit_roll)
+
+        return dataset
+
+    # ---------------------------------------------------------------
+
+    def _run_pvp(self, profile, skill):
+        """TBI"""
+        pass
+
+    # ----------------------------------------------------------------
+    # Damage calculations
+    def _calc_damage(self, profile, skill) -> float | int:
+        """General damage formula to be used if all input values are known.
+        Applies base damage (5% of AP) below DR breakpoint, EAP damage
+        (AP - DR + species) until any cap, and cap damage
+        (ap_cap + cap_modifier * overcap_ap - enemy_dr + species) above the cap.
+        All damage is then scaled by skill_percent."""
+        # --------------
+        rolled_ap: int = roll_range(min=profile["min_ap"], max=profile["max_ap"])
+        rolled_species_ap: int = roll_range(
+            profile["min_species_ap"], profile["max_species_ap"]
+        )
+        # --------------
+        overcap_ap: int = calc_overcap_ap(ap_value=rolled_ap, ap_cap=profile["ap_cap"])
+        scalar_ap: int = rolled_ap - profile["dr"] + rolled_species_ap
+        # -------------
+        # This check is equivalent to eap_damage < 0.05 * ap_value
+        # but is faster with no floating point issues
+        if 20 * scalar_ap < rolled_ap:
+            # Use the base damage formula
+            print("returning base damage")
+            return get_base_damage(ap_value=rolled_ap, skill_percent=skill["damage"])
+
+        e_ap: int = scalar_ap + (overcap_ap * profile["cap_modifier"])
+        scaled_damage: int = e_ap * skill["damage"]
+
+        return scaled_damage
+
+    # ---------------------------------------------------------------
+
+    def _defender_species(self, attacker: Attacker, defender: Defender) -> int:
+        """returns attacker species damage"""
         if defender.species == "human":
             return attacker.human_damage
         elif defender.species == "demihuman":
             return attacker.demi_damage
         elif defender.species == "kamasylvian":
             return attacker.kama_damage
-        elif defender.species == "other":
+        else:
             return attacker.other_damage
 
 
@@ -136,7 +145,7 @@ the_calc = CalcV5()
 #     self.skill = skill
 
 
-# def get_pvp_base_damage(
+# def _get_pvp_base_damage(
 #     ap_value, skill_percent, skill_pvp_damage_reduction, class_pvp_modifier
 # ):
 #     """Calcuates PvP base damage below the DR breakpoint. This function expects

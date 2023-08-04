@@ -1,6 +1,7 @@
 import os
 
-import psycopg
+import psycopg as ppg
+from psycopg import Connection, Cursor
 from psycopg.rows import dict_row
 
 import tomllib
@@ -9,23 +10,19 @@ import tomllib
 # ----------------------------------------------------------------
 try:
     with open("X:/0.code/ynix_b/db/env.toml", "rb") as f:
-        data = tomllib.load(f)
-        config = data["DB_ENV"]
+        data: dict = tomllib.load(f)
+        config: dict[str, str | int] = data["DB_ENV"]
 except ValueError as e:
     print(e)
 
 # ----------------------------------------------------------------
-conn = (
-    psycopg.connect(
-        hostaddr=config["LAB_DB_SERVER"],
-        port=config["LAB_DB_PORT"],
-        dbname=config["LAB_DB_NAME"],
-        user=config["USER_NAME"],
-        password=config["PASS_WORD"],
-        row_factory=dict_row,
-    )
-    if data != None
-    else psycopg.connect(conninfo=os.environ.get("DATABASE_URL"), row_factory=dict_row)
+conn: Connection = ppg.connect(
+    hostaddr=config["LAB_DB_SERVER"],
+    port=config["LAB_DB_PORT"],
+    dbname=config["LAB_DB_NAME"],
+    user=config["USER_NAME"],
+    password=config["PASS_WORD"],
+    row_factory=dict_row,
 )
 
-cur = conn.cursor()
+cur: Cursor = conn.cursor()

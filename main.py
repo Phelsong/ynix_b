@@ -1,4 +1,5 @@
 import os
+from typing import Any
 
 # libs
 import uvicorn
@@ -9,14 +10,21 @@ from fastapi.middleware.cors import CORSMiddleware
 from src.Attacker import Attacker
 from src.Defender import Defender
 from src.calc_v5 import the_calc
-
-from db.queries import *
+from db.queries import (
+    get_class_basic_skills_query,
+    get_class_list_query,
+    get_class_query,
+    get_class_skills_query,
+    get_skill_details_query,
+    get_zone_list_query,
+    get_zone_query,
+)
 
 
 # =============================================================================
 app = FastAPI()
 # -----------------------------------------------------------------------------
-origins = [
+origins: list[str] = [
     "http://localhost",
     "http://localhost:3000",
     "https://localhost:3000",
@@ -25,7 +33,7 @@ origins = [
     "https://ynix-b.herokuapp.com",
 ]
 app.add_middleware(
-    CORSMiddleware,
+    middleware_class=CORSMiddleware,
     allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
@@ -37,7 +45,7 @@ app.add_middleware(
 
 
 @app.get("/health")
-def health_check():
+def health_check() -> dict[str, str]:
     return {"Server Status": "You've got Py"}
 
 
@@ -46,7 +54,7 @@ def health_check():
 
 @app.get("/class/{class_id}")
 async def get_class(class_id):
-    [data] = get_class_query(class_id)
+    [data] = get_class_query(class_id=class_id)
     return data
 
 
@@ -54,8 +62,8 @@ async def get_class(class_id):
 
 
 @app.get("/class/{class_id}/skill_list")
-def get_class_skill_list(class_id):
-    skill_list = get_class_skills_query(class_id)
+def get_class_skill_list(class_id) -> list[dict[str, Any]]:
+    skill_list: list[dict[str, Any]] = get_class_skills_query(class_id=class_id)
     return skill_list
 
 
@@ -77,14 +85,14 @@ async def basic_calc(attacker_in: dict, defender_in: dict, skill_id: tuple):
     defender = Defender(defender_in)
     print(attacker, defender)
     [skill] = get_skill_details_query(skill_id[0])
-    # return the_calc.simulate_damage(attacker, defender, skill)
+    return the_calc.simulate_damage(attacker, defender, skill)
 
 
 # ------------------------------------------------------------------------------
 
 
 @app.get("/zones")
-def get_zone_list():
+def get_zone_list() -> list[dict[str, Any]]:
     data = get_zone_list_query()
     return data
 

@@ -2,17 +2,16 @@
 # libs
 
 # imports
-from re import T
 from src.calc.calc_die import roll_die
 
 
 # ===========================================================================
-def get_ap_range(attacker):
+def get_ap_range(attacker) -> tuple[int, int]:
     # TODO: this is probably the normal roll
     return attacker.ap, attacker.ap
 
 
-def roll_ap(profile):
+def roll_ap(profile) -> tuple[int, int]:
     """Calculates (min_ap, max_ap) for the given 'ap_value' using
     'attack_dice' (list of character + weapon dice) and 'gear_offsets'
     (list of other offsets, like Kutum's -2). Any given 'species_damage'
@@ -26,8 +25,8 @@ def roll_ap(profile):
     # else:
     #     damage = self.get_physical_damage(attacker, defender, min_dr, max_dr)
 
-    min_ap = profile["min_ap"]
-    max_ap = profile["max_ap"]
+    min_ap_roll: int = profile["min_ap"]
+    max_ap_roll: int = profile["max_ap"]
 
     return min_ap_roll, max_ap_roll
 
@@ -53,7 +52,7 @@ def get_species_ap_range(species_damage) -> tuple[int, int]:
 
 
 # ===========================================================================
-def calc_overcap_ap(ap_value, ap_cap):
+def calc_overcap_ap(ap_value: int, ap_cap: int) -> int:
     overcap_ap = ap_value - ap_cap
     if overcap_ap > 0:
         ap_value = ap_cap

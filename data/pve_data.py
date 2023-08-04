@@ -1,4 +1,5 @@
 import pandas as pd
+from pandas import DataFrame
 
 # ----------------------------------------------------------------------------
 
@@ -19,7 +20,7 @@ class Zone:
         ap_cap: int = 1000,
         dr_cap_mod: float = 0.7,
         evasion: int = 0,
-    ):
+    ) -> None:
         self.name: str = name
         self.id: int = id
         self.mob_type: str = mob_type
@@ -38,10 +39,10 @@ zone_list: dict[str, Zone] = {}
 
 # ================================================================
 
-solo = pd.read_csv("X:/0.code/ynix_b/data/PvE/solo_spots.csv")
-party = pd.read_csv("X:/0.code/ynix_b/data/PvE/party_spots.csv")
-spots = pd.merge(solo, party, how="outer")
-spots.sort_values("Recommended", inplace=True, ignore_index=True)
+solo: DataFrame = pd.read_csv("X:/0.code/ynix_b/data/PvE/solo_spots.csv")
+party: DataFrame = pd.read_csv("X:/0.code/ynix_b/data/PvE/party_spots.csv")
+spots: DataFrame = pd.merge(solo, party, how="outer")
+spots.sort_values(by="Recommended", inplace=True, ignore_index=True)
 
 
 for idx, row in spots.iterrows():
