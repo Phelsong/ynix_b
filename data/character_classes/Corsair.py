@@ -9,6 +9,7 @@ Splashin_Around_X = Skill(
     class_id=23,
     name="Splashin' Around X",
     acc_rate=0.05,
+    attack_count=1,
     hit1=Hit(damage=5.72, hit_count=3, pvp_mod=0.40),
 )
 # ----------------------------------------------------------------

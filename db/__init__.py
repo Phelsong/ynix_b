@@ -1,4 +1,5 @@
-#/src/DB INIT
+# /src/DB INIT
 
-# from .queries import *
-# from .connection import *
+from .queries import *
+from .connection import *
+from .seed import run_seed
