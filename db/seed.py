@@ -13,7 +13,7 @@ from data.pve_data import zone_list
 def drop_tables() -> None:
     """drops existing tables"""
     cur.execute(
-        """
+        query="""
                    DROP TABLE IF EXISTS zones;
                    DROP TABLE IF EXISTS class_skills;
                    DROP TABLE IF EXISTS class_data;
@@ -27,18 +27,18 @@ def drop_tables() -> None:
 def create_tables():
     """creates new table structure"""
     cur.execute(
-        """CREATE TABLE users
+        query="""CREATE TABLE users
                     (user_id SERIAL PRIMARY KEY
                     , username varchar(100) NOT NULL,
                     password varchar(200))"""
     )
     cur.execute(
-        """CREATE TABLE classes
+        query="""CREATE TABLE classes
                     (class_id INT PRIMARY KEY ,
                     class_name VARCHAR(150) NOT NULL)"""
     )
     cur.execute(
-        """CREATE TABLE class_skills
+        query="""CREATE TABLE class_skills
                    (skill_id float4 PRIMARY KEY NOT NULL,
                    "class_id" INT REFERENCES classes(class_id) NOT NULL,
                    skill_name VARCHAR(200) NOT NULL,
@@ -46,12 +46,12 @@ def create_tables():
                    """
     )
     cur.execute(
-        """CREATE TABLE class_data
+        query="""CREATE TABLE class_data
                 (class_id INT REFERENCES classes(class_id) NOT NULL,
                 pvp_class_mods json);"""
     )
     cur.execute(
-        """CREATE TABLE zones
+        query="""CREATE TABLE zones
                 (zone_id INT PRIMARY KEY,
                 zone_name VARCHAR(200) NOT NULL,
                 mob_type VARCHAR(200) NOT NULL,
@@ -74,17 +74,17 @@ def class_seed():
 
     for char in class_list.values():
         cur.execute(
-            """INSERT INTO classes (class_id, class_name)
+            query="""INSERT INTO classes (class_id, class_name)
                    VALUES (%s , %s )""",
-            (char.id, char.name),
+            params=(char.id, char.name),
         )
 
     for skill in skill_list.values():
         details = ujson.dumps(skill.__dict__)
         cur.execute(
-            """INSERT INTO class_skills (skill_id, class_id, skill_name, skill_details)
+            query="""INSERT INTO class_skills (skill_id, class_id, skill_name, skill_details)
                     values (%s , %s, %s, %s)""",
-            (skill.id, skill.class_id, skill.name, details),
+            params=(skill.id, skill.class_id, skill.name, details),
         )
 
 
@@ -94,9 +94,9 @@ def zone_seed():
 
     for zone in zone_list.values():
         cur.execute(
-            """INSERT INTO zones (zone_id, zone_name, mob_type, region, zone_recommended_ap, zone_dr_breakpoint,  zone_dr, zone_ap_cap, zone_dr_cap_mod, zone_evasion)
+            query="""INSERT INTO zones (zone_id, zone_name, mob_type, region, zone_recommended_ap, zone_dr_breakpoint,  zone_dr, zone_ap_cap, zone_dr_cap_mod, zone_evasion)
                 VALUES ( %s , %s , %s , %s , %s , %s, %s, %s, %s, %s )""",
-            (
+            params=(
                 zone.id,
                 zone.name,
                 zone.mob_type,
@@ -111,12 +111,16 @@ def zone_seed():
         )
 
 
-# ----------------------------------------------------------------
-if __name__ == "__main__":
+def run_seed():
     drop_tables()
     create_tables()
     class_seed()
     zone_seed()
     conn.commit()
     conn.close()
+
+
+# ----------------------------------------------------------------
+if __name__ == "__main__":
+    run_seed()
 # ----------------------------------------------------------------

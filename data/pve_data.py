@@ -48,7 +48,7 @@ spots.sort_values(by="Recommended", inplace=True, ignore_index=True)
 for idx, row in spots.iterrows():
     Zone(
         name=row["Grindspot"],
-        id=idx + 1,
+        id=idx + 1,  # type: ignore
         mob_type=row["Mob_Type"],
         recommended_ap=row["Recommended"],
         dr_breakpoint=row["DR_Breakpoint"],

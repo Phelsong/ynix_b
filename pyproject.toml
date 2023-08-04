@@ -37,5 +37,5 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
 start_dev = 'main:server.run'
-seed_dev = 'db:seed.py'
+seed_dev = 'db:seed.run_seed'
 test_calc = 'tests:test_calc.run_calc_test'

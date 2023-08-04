@@ -50,7 +50,7 @@ class CalcV5:
         )
 
         if run_type == 1:
-            return self._run_pve(profile=profile, skill=skill)
+            return self._run_skill_pve(profile=profile, skill=skill)
         elif run_type == 2:
             return {"pvp": 0}
             # return self._run_pvp(profile, skill)
@@ -74,20 +74,24 @@ class CalcV5:
 
     # ---------------------------------------------------------------
 
-    def _run_pve(self, profile, skill, run_length=1):
+    def _run_skill_pve(self, profile, skill) -> dict[str, str | list[float]]:
         """Simulates damage for a given profile and skill"""
 
-        dataset: dict[str, int | float] = {}
+        dataset: dict[str, str | list[float]] = {"skill": skill["name"]}
 
-        for i in range(run_length):
-            hit_roll = self._calc_damage(profile=profile, skill=skill["hit1"])
-            dataset.setdefault(f"hit_{i+1}", hit_roll)
+        for i in range(1, skill["attack_count"] + 1):
+            rolls: list[float] = []
+            for u in range(1, skill[f"hit{i}"]["hit_count"] + 1):
+                rolls.append(
+                    int(self._calc_damage(profile=profile, skill=skill[f"hit{i}"]))
+                )
+            dataset.setdefault(f"hit_{i}", rolls)
 
         return dataset
 
     # ---------------------------------------------------------------
 
-    def _run_pvp(self, profile, skill):
+    def _run_pvp(self, profile, skill) -> None:
         """TBI"""
         pass
 
@@ -116,7 +120,7 @@ class CalcV5:
             return get_base_damage(ap_value=rolled_ap, skill_percent=skill["damage"])
 
         e_ap: int = scalar_ap + (overcap_ap * profile["cap_modifier"])
-        scaled_damage: int = e_ap * skill["damage"]
+        scaled_damage: int = np.multiply(e_ap, skill["damage"])
 
         return scaled_damage
 

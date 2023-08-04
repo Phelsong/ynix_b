@@ -8,7 +8,7 @@ from db.queries import get_skill_details_query
 
 def run_calc_test() -> None:
     attacker_in: dict[str, int | float | str] = {
-        "class_id": 18,
+        "class_id": 3,
         "ap": 600,
         "aap": 0,
         "acc": 0,
@@ -44,7 +44,7 @@ def run_calc_test() -> None:
         "ap_cap": 9999,
         "cap_modifier": 1,
     }
-    skill_id = [18.01]
+    skill_id = [3.1]
     # ------------------------------
     attacker = Attacker(attacker_in)
     defender = Defender(defender_in)
@@ -53,4 +53,5 @@ def run_calc_test() -> None:
 
 
 if __name__ == "__main__":
-    run_calc_test()
+    for i in range(10):
+        run_calc_test()
