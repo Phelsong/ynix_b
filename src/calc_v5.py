@@ -80,14 +80,16 @@ class CalcV5:
         dataset: dict[str, int | float] = {}
 
         for i in range(run_length):
-            hit_roll = self._calc_damage(profile=profile, skill=skill["hit1"])
+            hit_roll: float | int = self._calc_damage(
+                profile=profile, skill=skill["hit1"]
+            )
             dataset.setdefault(f"hit_{i+1}", hit_roll)
 
         return dataset
 
     # ---------------------------------------------------------------
 
-    def _run_pvp(self, profile, skill):
+    def _run_pvp(self, profile, skill) -> None:
         """TBI"""
         pass
 
