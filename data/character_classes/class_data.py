@@ -1,11 +1,11 @@
 # --------------------------------------------------------------------------------
 class Class:
-    def __init__(self, id, name, dr, evasion):
-        self.id = id
-        self.name = name
-        self.dr = dr
-        self.evasion = evasion
-        self.species = "human"
+    def __init__(self, id, name, dr, evasion) -> None:
+        self.id: int = id
+        self.name: str = name
+        self.dr: int = dr
+        self.evasion: int = evasion
+        self.species: str = "human"
         class_list.setdefault(self.name, self)
         # self.skills = {}
 
@@ -15,29 +15,29 @@ class Class:
 class Skill:
     def __init__(
         self,
-        id,
-        class_id,
-        name,
-        acc_rate,
-        hit1,
-        hit2=None,
-        hit3=None,
-        hit4=None,
-        hit5=None,
-        hit6=None,
-        reduced_on_cd=False,
-    ):
-        self.id = id
-        self.class_id = class_id
-        self.name = name
-        self.acc_rate = acc_rate
-        self.hit1 = hit1.__dict__ if hit1 is not None else None
-        self.hit2 = hit2.__dict__ if hit2 is not None else None
-        self.hit3 = hit3.__dict__ if hit3 is not None else None
-        self.hit4 = hit4.__dict__ if hit4 is not None else None
-        self.hit5 = hit5.__dict__ if hit5 is not None else None
-        self.hit6 = hit6.__dict__ if hit6 is not None else None
-        self.reduced_on_cd = reduced_on_cd
+        id: int | float,
+        class_id: int,
+        name: str,
+        acc_rate: float,
+        hit1: dict,
+        hit2: dict | None = None,
+        hit3: dict | None = None,
+        hit4: dict | None = None,
+        hit5: dict | None = None,
+        hit6: dict | None = None,
+        reduced_on_cd: bool = False,
+    ) -> None:
+        self.id: int | float = id
+        self.class_id: int = class_id
+        self.name: str = name
+        self.acc_rate: float = acc_rate
+        self.hit1: dict = hit1.__dict__
+        self.hit2: dict | None = hit2.__dict__ if hit2 is not None else None
+        self.hit3: dict | None = hit3.__dict__ if hit3 is not None else None
+        self.hit4: dict | None = hit4.__dict__ if hit4 is not None else None
+        self.hit5: dict | None = hit5.__dict__ if hit5 is not None else None
+        self.hit6: dict | None = hit6.__dict__ if hit6 is not None else None
+        self.reduced_on_cd: bool = reduced_on_cd
         skill_list.setdefault(self.name, self)
 
 
@@ -54,21 +54,21 @@ class Hit:
         down_attack=True,
         air_attack=False,
     ):
-        self.damage = damage
-        self.hit_count = hit_count
-        self.pvp_mod = pvp_mod
-        self.pve_crit_rate = pve_crit_rate
-        self.pvp_crit_rate = pvp_crit_rate
-        self.reduced_on_cd_amount = reduced_on_cd_amount
-        self.reduced_pvp_hits = reduced_pvp_hits
-        self.down_attack = down_attack
-        self.air_attack = air_attack
+        self.damage: float = damage
+        self.hit_count: int = hit_count
+        self.pvp_mod: float = pvp_mod
+        self.pve_crit_rate: float = pve_crit_rate
+        self.pvp_crit_rate: float = pvp_crit_rate
+        self.reduced_on_cd_amount: float | None = reduced_on_cd_amount
+        self.reduced_pvp_hits: int | None = reduced_pvp_hits
+        self.down_attack: bool = down_attack
+        self.air_attack: bool = air_attack
 
 
 # ------------------------------------------------------------------------------
 
-class_list = {}
-skill_list = {}
+class_list: dict = {}
+skill_list: dict = {}
 
 from .Archer import *
 from .Corsair import *

@@ -10,7 +10,7 @@ from data.pve_data import zone_list
 # ----------------------------------------------------------------
 
 
-def drop_tables():
+def drop_tables() -> None:
     """drops existing tables"""
     cur.execute(
         """
