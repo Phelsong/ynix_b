@@ -1,5 +1,31 @@
 """ Attacker Object"""
 # from db.queries import get_class_basic_skills_query
+from pydantic import BaseModel
+
+
+class Attacker_Model(BaseModel):
+    ap: int
+    aap: int
+    acc: int
+    acc_rate: float
+    crit_rate: float
+    monster_ap: int
+    kama_damage: int
+    demi_damage: int
+    human_damage: int
+    other_damage: int
+    crit_damage: float
+    back_damage: float
+    down_damage: float
+    air_damage: float
+    ap_combat_buffs: int
+    crit_combat_buffs: float
+    ap_debuffs: int
+    acc_combat_buffs: float
+    acc_debuffs: float
+    human_damage_debuffs: int
+    t_ap: int
+    t_aap: int
 
 
 # ------------------------------

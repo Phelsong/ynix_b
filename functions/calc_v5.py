@@ -2,15 +2,13 @@
 # libs
 import numpy as np
 import pandas as pd
-from random import randint
 from typing import Any
 
 # imports
-from src.Attacker import Attacker
-from src.Defender import Defender
-from src.calc.calc_die import roll_range, roll_die
-from src.calc.calc_dr import get_dr_range
-from src.calc.calc_ap import (
+from models import Attacker_Model, Defender_Model
+from functions.calc.calc_die import roll_range, roll_die
+from functions.calc.calc_dr import get_dr_range
+from functions.calc.calc_ap import (
     get_ap_range,
     get_species_ap_range,
     get_base_damage,
@@ -24,8 +22,8 @@ class CalcV5:
 
     def simulate_damage(
         self,
-        attacker: Attacker,
-        defender: Defender,
+        attacker: Attacker_Model,
+        defender: Defender_Model,
         skill: dict,
         run_length: int = 1,
         run_type=1,
@@ -126,7 +124,9 @@ class CalcV5:
 
     # ---------------------------------------------------------------
 
-    def _defender_species(self, attacker: Attacker, defender: Defender) -> int:
+    def _defender_species(
+        self, attacker: Attacker_Model, defender: Defender_Model
+    ) -> int:
         """returns attacker species damage"""
         if defender.species == "human":
             return attacker.human_damage

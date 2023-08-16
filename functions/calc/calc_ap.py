@@ -3,7 +3,7 @@
 # import numpy as np
 
 # imports
-from src.calc.calc_die import roll_die
+from functions.calc.calc_die import roll_die
 
 
 # ===========================================================================

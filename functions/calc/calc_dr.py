@@ -1,7 +1,7 @@
 # PvP DR Functions
 
 # imports
-from src.calc.calc_die import roll_range
+from functions.calc.calc_die import roll_range
 
 
 # ======================================================

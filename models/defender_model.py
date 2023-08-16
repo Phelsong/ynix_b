@@ -1,5 +1,22 @@
 """ Defender Object"""
 # ------------------------------
+from pydantic import BaseModel
+
+
+class Defender_Model(BaseModel):
+    dr: int
+    dr_rate: float
+    evasion: int
+    evasion_rate: float
+    dr_combat_buffs: int
+    dr_debuffs: int
+    evasion_combat_buffs: float
+    evasion_debuffs: float
+    class_id: int
+    species: str
+    ap_cap: int
+    cap_modifier: float
+    # class_id = 100 = PvE
 
 
 class Defender(object):

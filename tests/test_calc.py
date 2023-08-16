@@ -1,8 +1,8 @@
 from typing import Any
 
-from src.calc_v5 import the_calc
-from src.Attacker import Attacker
-from src.Defender import Defender
+from functions.calc_v5 import the_calc
+from functions.Attacker import Attacker
+from functions.Defender import Defender
 from db.queries import get_skill_details_query
 
 

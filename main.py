@@ -7,9 +7,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 # imports
-from src.Attacker import Attacker
-from src.Defender import Defender
-from src.calc_v5 import the_calc
+from models import Float_Id, Int_Id, Attacker_Model, Defender_Model
+from functions.calc_v5 import the_calc
 from db.queries import (
     get_class_basic_skills_query,
     get_class_list_query,
@@ -26,11 +25,7 @@ app = FastAPI()
 # -----------------------------------------------------------------------------
 origins: list[str] = [
     "http://localhost",
-    "http://localhost:3000",
-    "https://localhost:3000",
     "http://127.0.0.1",
-    "http://ynix-b.herokuapp.com",
-    "https://ynix-b.herokuapp.com",
 ]
 app.add_middleware(
     middleware_class=CORSMiddleware,
@@ -63,15 +58,15 @@ async def get_class(class_id):
 
 @app.get("/class/{class_id}/skill_list")
 def get_class_skill_list(class_id) -> list[dict[str, Any]]:
-    skill_list: list[dict[str, Any]] = get_class_skills_query(class_id=class_id)
+    skill_list: list[dict[str, Any]] = get_class_skills_query(class_id=class_id.id)
     return skill_list
 
 
 # -----------------------------------------------------------------------------
 
 
-@app.get("/class/{class_id}/{skill_id}")
-async def get_class_skill(class_id, skill_id):
+@app.get("/class/{skill_id}")
+async def get_class_skill(skill_id):
     [skill] = get_skill_details_query(skill_id)
     return skill["skill_details"]
 
@@ -80,12 +75,13 @@ async def get_class_skill(class_id, skill_id):
 
 
 @app.put("/basic_calc")
-async def basic_calc(attacker_in: dict, defender_in: dict, skill_id: tuple):
-    print(attacker_in, defender_in)
-    attacker = Attacker(attacker_in)
-    defender = Defender(defender_in)
-    [skill] = get_skill_details_query(skill_id[0])
-    return the_calc.simulate_damage(attacker, defender, skill)
+async def basic_calc(
+    attacker_in: Attacker_Model,
+    defender_in: Defender_Model,
+    skill_id: Float_Id,
+):
+    [skill] = get_skill_details_query(skill_id.id)
+    return the_calc.simulate_damage(attacker_in, defender_in, skill["skill_details"])
 
 
 # ------------------------------------------------------------------------------
@@ -101,7 +97,7 @@ def get_zone_list() -> list[dict[str, Any]]:
 
 
 @app.get("/zones/{zone_id}")
-async def get_zone_info(zone_id):
+async def get_zone_info(zone_id) -> dict[str, Any]:
     [data] = get_zone_query(zone_id)
     return data
 
@@ -109,8 +105,8 @@ async def get_zone_info(zone_id):
 # ------------------------------------------------------------------------------
 server_config = uvicorn.Config(
     "main:app",
-    host="0.0.0.0",
-    port=(os.environ.get("PORT") or 8321),
+    host="::",
+    port=(8321),
     reload=True if os.getenv("ENVIRONMENT") == "dev" else False,
 )
 server = uvicorn.Server(server_config)
