@@ -4,6 +4,7 @@ from pydantic import BaseModel
 
 
 class Attacker_Model(BaseModel):
+    class_id: int
     ap: int
     aap: int
     acc: int
@@ -57,5 +58,7 @@ class Attacker(object):
         self.human_damage_debuffs: int = attacker_in["human_damage_debuffs"]
         self.t_ap: int = 0
         self.t_aap: int = 0
-        # [basic] = get_class_basic_skills_query(self.class_id)
-        # self.basic = basic["skill_details"]["hit1"]["damage"]
+
+
+# [basic] = get_class_basic_skills_query(self.class_id)
+# self.basic = basic["skill_details"]["hit1"]["damage"]

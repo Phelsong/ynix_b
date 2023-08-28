@@ -7,7 +7,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 # imports
-from models import Float_Id, Int_Id, Attacker_Model, Defender_Model
+from models import Float_Id, Attacker_Model, Defender_Model
 from functions.calc_v5 import the_calc
 from db.queries import (
     get_class_basic_skills_query,

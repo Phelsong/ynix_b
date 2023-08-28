@@ -143,12 +143,6 @@ class CalcV5:
 the_calc = CalcV5()
 
 
-# def __init__(self, attacker, defender, skill):
-#     self.attacker = attacker
-#     self.defender = defender
-#     self.skill = skill
-
-
 # def _get_pvp_base_damage(
 #     ap_value, skill_percent, skill_pvp_damage_reduction, class_pvp_modifier
 # ):

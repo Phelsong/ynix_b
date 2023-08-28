@@ -8,17 +8,16 @@ packages = [{ include = "data" }, { include = "db" }, { include = "functions" }]
 
 [tool.poetry.dependencies]
 python = ">=3.10.7"
-pendulum = "^2.1.2"
-fastapi = "^0.100.0"
-psycopg = "^3.1.9"
-uvicorn = "^0.23.1"
-python-dotenv = "^0.20.0"
-ujson = "^5.8.0"
-numpy = "^1.25.1"
-pandas = "^2.0.3"
-psycopg-binary = "^3.1.9"
-python-multipart = "^0.0.6"
-pydantic = "^2.1.1"
+pendulum = ">=2.1.2"
+fastapi = ">=0.100.0"
+uvicorn = ">=0.23.1"
+python-dotenv = "^>=0.20.0"
+ujson = ">=5.8.0"
+numpy = ">=1.25.1"
+pandas = ">=2.0.3"
+psycopg-binary = ">=3.1.9"
+python-multipart = ">=0.0.6"
+pydantic = ">=2.1.1"
 
 [tool.poetry.group.dev.dependencies]
 black = { version = "^22.10.0", allow-prereleases = true }

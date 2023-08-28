@@ -1,0 +1,1 @@
+stubgen.exe . -o ./stubs

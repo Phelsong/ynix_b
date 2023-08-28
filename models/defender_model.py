@@ -33,4 +33,6 @@ class Defender(object):
         self.species: str = defender_in["species"]
         self.ap_cap: int = defender_in["ap_cap"]
         self.cap_modifier: float = defender_in["cap_modifier"]
-        # class_id = 100 = PvE
+
+
+# class_id = 100 = PvE
